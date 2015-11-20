@@ -302,7 +302,7 @@ class Alarm:
     def update(self):
         if self.state == Alarm.TRIPPED:
             self.update_tripped()
-        elif self.state == Alarm.DISARMED:
+        elif self.state == Alarm.FALT:
             self.update_falted()
         self.update_state()
         states = {}
