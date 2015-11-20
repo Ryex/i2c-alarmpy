@@ -1,0 +1,49 @@
+{% extends "layout.j2" %}
+{% block title %}Users{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Users</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Delete</th>
+                    </tr>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user["user_id"] }}</td>
+                    <td>{{ user["username"] }}</td>
+                    <td>
+                        <form method="DELETE" action="{{ url_for('users') }}">
+                            <input type="hidden" name="id" value="{{ user['user_id'] }}">
+                            <button class="btn btn-primary btn-block" type="submit">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+        {% endif %}
+        <form class="form-signin" action="{{ url_for('login') }}" method=post>
+            <label for="inputUsername" class="sr-only">Username</label>
+            <input type="text" id="inputUsername" name=username class="form-control" placeholder="Username" required autofocus>
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" type=password name=password class="form-control" placeholder="Password" required>
+            <input type=password name=password_confirm class="form-control" placeholder="Confirm Password" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
+        </form>
+    </div> <!-- /container -->
+{% endblock %}

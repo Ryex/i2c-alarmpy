@@ -1,0 +1,106 @@
+{% extends "layout.j2" %}
+{% block title %}Interface Configuration{% endblock %}
+{% block body %}
+    <div class="container">
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Peripheral Interfaces</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Type</th>
+                        <th>IO</th>
+                        <th>Data</th>
+                    </tr>
+                {% for interface in interfaces %}
+                <tr>
+                    <td>{{ interface["interface_id"] }}</td>
+                    <td>{{ smbio.INTERFACETYPES[interface["type"]] }}</td>
+                    <td>{{ interface["io_id"] }}</td>
+                    <td>
+                        <table>
+                            <tr>
+                            {% for data_key in smbio.INTERFACEDATAMAP[interface["type"]] %}
+                                <th>{{ data_key }}</th>
+                            {% endfor %}
+                            </tr>
+                            <tr>
+                            {% for data_key in interface["data"] %}
+                                <td>{{ interface["data"][data_key] }}</td>
+                            {% endfor %}
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <form method="DELETE" action="{{ url_for('interface_config') }}">
+                            <input type="hidden" name="id" value="{{ interface['interface_id'] }}">
+                            <button class="btn btn-primary btn-block" type="submit">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div id="i_type_option_out" class="hide">
+            {% for tkey in  smbio.INTERFACETYPES %}
+            <div class="i_type_options_{{ tkey }}" data-show="{{ tkey }}">
+                {% for dkey in smbio.INTERFACEDATAMAP[tkey] %}
+                    {% set itype_data = smbio.INTERFACEDATAMAP[tkey][dkey] %}
+                    <label for="input_{{ dkey }}" class="sr-only">{{ dkey }}/label>
+                    {% if itype_data == 'int' %}
+                    <input type="number" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" >
+                    {% elif itype_data == 'pin' %}
+                    <input type="number" min="0" max="7" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" >
+                    {% elif itype_data == 'bool' %}
+                    <select id="input_{{ dkey }}" class="form-control" name="{{ dkey }}">
+                        <option value="1">True</option>
+                        <option value="0">False</option>
+                    </select>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        <form method="POST" action="{{ url_for('io_config') }}">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="inputType" class="sr-only">Type</label>
+                    <select id="inputType" class="form-control" name=type data-target="#i_type_options_in" data-bin="i_type_option_out" required>
+                        {% for key in  smbio.INTERFACETYPES %}
+                        <option value="{{ key }}" data-show=".i_type_options_{{ key }}">{{ smbio.INTERFACETYPES[key] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="inputIO" class="sr-only">IO</label>
+                    <select id="inputIO" class="form-control" name=io_id required>
+                        {% for key in  ios %}
+                        <option value="{{ ios[key]['io_id'] }}">{{ ios[key]['io_id'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="i_type_options_in" class="col-md-3">
+
+                </div>
+                <div class="col-md-3"><button class="form-control btn btn-default" type="submit">Add</button></div>
+            </div>
+
+        </form>
+        <script type="text/javascript">
+            $('select.div-toggle').change(move_options)
+        </script>
+
+    </div> <!-- /container -->
+{% endblock %}

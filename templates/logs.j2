@@ -1,0 +1,42 @@
+{% extends "layout.j2" %}
+{% block title %}Logs{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <a class="btn btn-default {% if mode == "logs" %}active{% endif %}" href="{{ url_for('logs') }}">Logs</a>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-default {% if mode == "errors" %}active{% endif %}" href="{{ url_for('errors') }}">Errors</a>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-default {% if mode == "alarms" %}active{% endif %}" href="{{ url_for('alarms') }}">Alarms</a>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">IO Interfaces</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Error</th>
+                        <th>Alarm</th>
+                        <th>Message</th>
+                        <th>Time</th>
+                    </tr>
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log["log_id"] }}</td>
+                    <td>{{ log["error"] }}</td>
+                    <td>{{ log["alarm"] }}</td>
+                    <td>{{ log["message"] }}</td>
+                    <td>{{ log["log_time"]|format_local_time }}</td>
+                </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div> <!-- /container -->
+{% endblock %}

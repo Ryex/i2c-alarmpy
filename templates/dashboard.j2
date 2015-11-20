@@ -1,0 +1,155 @@
+{% extends "layout.j2" %}
+{% block title %}Dashboard{% endblock %}
+{% block body %}
+    <div class="container">
+        
+        {% if not running %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            The alarm system is not running!
+        </div>
+        {% elif not thread_state["running"] %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            The alarm thread is not running!
+        </div>
+        {% endif %}
+
+        {% if flags["alarm"] %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            An alarm has been triggered.
+        </div>
+        {% elif flags["tripped"] %}
+        <div class="alert alert-warning" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            A detector has tripped, but an alarm has not yet been triggered.
+        </div>
+        {% elif flags["falted"] %}
+        <div class="alert alert-warning" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            Your system is falted and can not be armed.
+        </div>
+        {% elif flags["disarmed"] %}
+        <div class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            Your system is disarmed.
+        </div>
+        {% else %}
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Your system is armed.
+        </div>
+        {% endif %}
+
+        <div class="panel panel-default">
+            <strong>System Running:</strong> {{ running }}
+        </div>
+
+        {% if running %}
+
+        <div class="panel panel-default">
+            <strong>Alarm Thread Running:</strong> {{ thread_state["running"] }} {{ thread_state["utime"] }}
+        </div>
+
+        <div class="panel panel-default">
+            <strong>Last Status Update:</strong> {{ state_text }} {{ utime }}
+        </div>
+
+        <div class="panel panel-default">
+
+            <div class="row">
+                <div class="col-md-3">
+                    <form method="POST" action="{{ url_for('arm') }}">
+                    <button class ="form-control btn btn-success"
+                        {% if not flags["disarmed"] %}
+                        disabled="disabled"
+                        {% endif %}
+                        type="submit" name="action" value="arm">Arm</button>
+                    </form>​​​​​​​​​​​​​​​​​​​​​​​​​​
+                </div>
+                <div class="col-md-3">
+                    <form method="POST" action="{{ url_for('disarm') }}">
+                    <button class ="form-control btn btn-warning"
+                        {% if not flags["armed"] %}
+                        disabled="disabled"
+                        {% endif %}
+                        type="submit" name="action" value="disarm">Disarm</button>
+                    </form>​​​​​​​​​​​​​​​​​​​​​​​​​​
+                </div>
+                <div class="col-md-3">
+                    <form method="POST" action="{{ url_for('alarm') }}">
+                    <button class ="form-control btn btn-danger"
+                        {% if not flags["armed"] %}
+                        disabled="disabled"
+                        {% endif %}
+                        type="submit" name="action" value="alarm">Alarm</button>
+                    </form>​​​​​​​​​​​​​​​​​​​​​​​​​​
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <form method="POST" action="{{ url_for('start') }}">
+                    <button class ="form-control btn btn-success"
+                        {% if thread_state["running"] %}
+                        disabled="disabled"
+                        {% endif %}
+                        type="submit" name="action" value="start">Start</button>
+                    </form>​​​​​​​​​​​​​​​​​​​​​​​​​​
+                </div>
+                <div class="col-md-3">
+                    <form method="POST" action="{{ url_for('stop') }}">
+                    <button class ="form-control btn btn-danger"
+                        {% if not thread_state["running"] %}
+                        disabled="disabled"
+                        {% endif %}
+                        type="submit" name="action" value="stop">Stop</button>
+                    </form>​​​​​​​​​​​​​​​​​​​​​​​​​​
+                </div>
+                <div class="col-md-3">
+                    <form method="POST" action="{{ url_for('restart') }}">
+                    <button class ="form-control btn btn-primary"
+                        {% if not thread_state["running"] %}
+                        disabled="disabled"
+                        {% endif %}
+                        type="submit" name="action" value="restart">Restart</button>
+                    </form>​​​​​​​​​​​​​​​​​​​​​​​​​​
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Interface Status</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Type</th>
+                        <th>IO</th>
+                        <th>Status</th>
+                    </tr>
+                {% for interface in interfaces %}
+                <tr>
+                    <td>{{ interface["interface_id"] }}</td>
+                    <td>{{ smbio.INTERFACETYPES[interface["type"]] }}</td>
+                    <td>{{ interface["io_id"] }}</td>
+
+                    <td>
+                        {% if state_data %}
+                        {{ state_data[interface["interface_id"]] }}
+                        {% else %}
+                        No Data
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+    </div> <!-- /container -->
+{% endblock %}

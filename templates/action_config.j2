@@ -1,0 +1,66 @@
+{% extends "layout.j2" %}
+{% block title %}Action Configuration{% endblock %}
+{% block body %}
+    <div class="container">
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">IO Interfaces</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Action</th>
+                        <th>Reason</th>
+                        <th>Delete</th>
+                    </tr>
+                {% for action in actions %}
+                <tr>
+                    <td>{{ action["action_id"] }}</td>
+                    <td>{{ action["action"] }}</td>
+                    <td>{{ action["reason"] }}</td>
+                    <td>
+                        <form method="DELETE" action="{{ url_for('action_config') }}">
+                            <input type="hidden" name="id" value="{{ action['action_id'] }}">
+                            <button class="btn btn-primary btn-block" type="submit">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+        <form method="POST" action="{{ url_for('action_config') }}">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="inputCode" class="sr-only">Code</label>
+                    <input type="text" id="inputCode" class="form-control" placeholder="Code" name=code required>
+                </div>
+                <div class="col-md-3">
+                    <label for="inputCmd" class="sr-only">Command</label>
+                    <select id="inputCmd" class="form-control" name=cmd required>
+                        {% for key in  commands %}
+                        <option value="{{ key }}">{{ commands[key] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="inputReason" class="sr-only">Hex Address</label>
+                    <input type="text" id="inputReason" class="form-control" placeholder="Reason" name=reason required>
+                </div>
+                <div class="col-md-3"><button class="form-control btn btn-default" type="submit">Add</button></div>
+            </div>
+
+        </form>
+
+    </div> <!-- /container -->
+{% endblock %}
