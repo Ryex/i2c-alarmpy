@@ -77,7 +77,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <label for="inputType" class="sr-only">Type</label>
-                    <select id="inputType" class="form-control" name=type data-target="#i_type_options_in" data-bin="i_type_option_out" required>
+                    <select id="inputType" class="form-control div-toggle" name=type data-target="#i_type_options_in" data-bin="i_type_option_out" required>
                         {% for key in  smbio.INTERFACETYPES %}
                         <option value="{{ key }}" data-show=".i_type_options_{{ key }}">{{ smbio.INTERFACETYPES[key] }}</option>
                         {% endfor %}
