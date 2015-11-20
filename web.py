@@ -93,8 +93,8 @@ def users():
         return flask.redirect(flask.url_for('setup'))
     if ('logged_in' not in flask.session) or (not flask.session['logged_in']):
         return flask.redirect(flask.url_for('login'))
+
     error = None
-    users = utils.get_users()
     if flask.request.method == 'POST':
         username = flask.request.form['username']
         user = utils.get_user()
@@ -109,12 +109,15 @@ def users():
         else:
             error = "user already exists"
     elif flask.request.method == 'DELETE':
+        users = utils.get_users()
         if len(users) > 1:
             user_id = flask.request.form['id']
             utils.delete_user(user_id)
             flask.flash('User Deleted')
         else:
             flask.flash("can not delete last user")
+
+    users = utils.get_users()
     return flask.render_template(
         'users.j2',
         users=users,
@@ -249,6 +252,7 @@ def logs_alarms():
 def start():
     if 'logged_in' in flask.session and flask.session['logged_in']:
         utils.write_command({"start": "Web Interface Start"})
+        return flask.redirect(flask.url_for('dashboard'))
     return flask.abort(403)
 
 
@@ -256,6 +260,7 @@ def start():
 def stop():
     if 'logged_in' in flask.session and flask.session['logged_in']:
         utils.write_command({"stop": "Web Interface Stop"})
+        return flask.redirect(flask.url_for('dashboard'))
     return flask.abort(403)
 
 
@@ -263,6 +268,7 @@ def stop():
 def restart():
     if 'logged_in' in flask.session and flask.session['logged_in']:
         utils.write_command({"restart": "Web Interface Restart"})
+        return flask.redirect(flask.url_for('dashboard'))
     return flask.abort(403)
 
 
@@ -270,6 +276,7 @@ def restart():
 def arm():
     if 'logged_in' in flask.session and flask.session['logged_in']:
         utils.write_command({"action": {"arm": "Web Interface Arm"}})
+        return flask.redirect(flask.url_for('dashboard'))
     return flask.abort(403)
 
 
@@ -277,6 +284,7 @@ def arm():
 def disarm():
     if 'logged_in' in flask.session and flask.session['logged_in']:
         utils.write_command({"action": {"disarm": "Web Interface Disarm"}})
+        return flask.redirect(flask.url_for('dashboard'))
     return flask.abort(403)
 
 
@@ -284,6 +292,7 @@ def disarm():
 def alarm():
     if 'logged_in' in flask.session and flask.session['logged_in']:
         utils.write_command({"action": {"alarm": "Web Interface Alarm"}})
+        return flask.redirect(flask.url_for('dashboard'))
     return flask.abort(403)
 
 
@@ -296,7 +305,7 @@ def io_config():
         return flask.redirect(flask.url_for('setup'))
     if ('logged_in' not in flask.session) or (not flask.session['logged_in']):
         return flask.redirect(flask.url_for('login'))
-    ios = utils.get_ios()
+
     error = None
     if flask.request.method == 'POST':
         io_type = flask.request.form['type']
@@ -308,6 +317,8 @@ def io_config():
         io_id = flask.request.form['id']
         utils.delete_io(io_id)
         flask.flash('IO Deleted')
+
+    ios = utils.get_ios()
     return flask.render_template(
         'io_config.j2',
         error=error,
@@ -321,8 +332,7 @@ def interface_config():
         return flask.redirect(flask.url_for('setup'))
     if ('logged_in' not in flask.session) or (not flask.session['logged_in']):
         return flask.redirect(flask.url_for('login'))
-    interfaces = utils.get_interfaces()
-    ios = utils.get_ios()
+
     error = None
     if flask.request.method == 'POST':
         interface_type = flask.request.form['type']
@@ -338,6 +348,9 @@ def interface_config():
         interface_id = flask.request.form['id']
         utils.delete_interface(interface_id)
         flask.flash('Interface Deleted')
+
+    interfaces = utils.get_interfaces()
+    ios = utils.get_ios()
     return flask.render_template(
         'interface_config.j2',
         error=error,
@@ -352,7 +365,7 @@ def action_config():
         return flask.redirect(flask.url_for('setup'))
     if ('logged_in' not in flask.session) or (not flask.session['logged_in']):
         return flask.redirect(flask.url_for('login'))
-    actions = utils.get_actions()
+
     error = None
     if flask.request.method == 'POST':
         code = flask.request.form['code']
@@ -364,6 +377,8 @@ def action_config():
         action_id = flask.request.form['id']
         utils.delete_action(action_id)
         flask.flash('Action Deleted')
+
+    actions = utils.get_actions()
     return flask.render_template(
         'action_config.j2',
         error=error,
@@ -377,8 +392,7 @@ def indicator_config():
         return flask.redirect(flask.url_for('setup'))
     if ('logged_in' not in flask.session) or (not flask.session['logged_in']):
         return flask.redirect(flask.url_for('login'))
-    interfaces = utils.get_interfaces()
-    indicators = utils.get_indicators()
+
     error = None
     if flask.request.method == 'POST':
         interface_id = flask.request.form["interface_id"]
@@ -389,6 +403,9 @@ def indicator_config():
         interface_id = flask.request.form['id']
         utils.delete_interface(interface_id)
         flask.flash('Indicaor Deleted')
+
+    interfaces = utils.get_interfaces()
+    indicators = utils.get_indicators()
     return flask.render_template(
         'indicator_config.j2',
         error=error,
