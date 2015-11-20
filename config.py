@@ -33,7 +33,7 @@ if "tripped_timeout" not in Config:
     Config["tripped_timeout"] = 30
 
 if "falted_timeout" not in Config:
-    config["falted_timeout"] = 10
+    Config["falted_timeout"] = 10
 
 if "secret" not in Config:
     Config["secret"] = None
