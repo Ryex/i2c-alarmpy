@@ -86,7 +86,7 @@ def delete_user(user_id):
     c.execute(
         "delete from user "
         "where user_id = ?;",
-        user_id)
+        str(user_id))
     flask.g.db.commit()
 
 
@@ -152,7 +152,7 @@ def delete_io(io_id):
     c.execute(
         "delete from io "
         "where io_id = ?;",
-        io_id)
+        str(io_id))
     flask.g.db.commit()
 
 
@@ -197,7 +197,7 @@ def delete_interface(interface_id):
     c.execute(
         "delete from interface "
         "where interface_id = ?;",
-        interface_id)
+        str(interface_id))
     flask.g.db.commit()
 
 
@@ -237,7 +237,7 @@ def delete_indicator(indicator_id):
     c.execute(
         "delete from indicator "
         "where indicator_id = ?;",
-        indicator_id)
+        str(indicator_id))
     flask.g.db.commit()
 
 
@@ -283,7 +283,7 @@ def delete_action(action_id):
     c.execute(
         "delete from action "
         "where action_id = ?;",
-        action_id)
+        str(action_id))
     flask.g.db.commit()
 
 
