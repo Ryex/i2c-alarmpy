@@ -48,6 +48,10 @@ class Data:
                 "can only write ints with a bit length smaller than %s"
                 % (self.length,)
             )
+        self.bus.write_byte_data(self.addr, self.com, value << self.offset)
+
+    def read(self):
+        return self.bus.read_byte_data(self.addr, self.com) >> self.offset
 
 
 class IO():
