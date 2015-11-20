@@ -344,6 +344,7 @@ class Alarm:
 
     def process_switch(self, state, interface):
         if state:
+            print(state, interface)
             self.trip("Switch on interface %s tripped" % (interface.pid,))
 
 
