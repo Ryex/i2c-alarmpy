@@ -96,7 +96,7 @@ def users():
 
     error = None
     if flask.request.method == 'POST':
-        if flask.request.form.has_key("delete")
+        if flask.request.form.has_key("delete"):
             if len(utils.get_users()) > 1:
                 user_id = flask.request.form['id']
                 utils.delete_user(user_id)
@@ -308,7 +308,7 @@ def io_config():
 
     error = None
     if flask.request.method == 'POST':
-        if flask.request.form.has_key("delete")
+        if flask.request.form.has_key("delete"):
             io_id = flask.request.form['id']
             utils.delete_io(io_id)
             flask.flash('IO Deleted')
@@ -336,7 +336,7 @@ def interface_config():
 
     error = None
     if flask.request.method == 'POST':
-        if flask.request.form.has_key("delete")
+        if flask.request.form.has_key("delete"):
             interface_id = flask.request.form['id']
             utils.delete_interface(interface_id)
             flask.flash('Interface Deleted')
@@ -370,7 +370,7 @@ def action_config():
 
     error = None
     if flask.request.method == 'POST':
-        if flask.request.form.has_key("delete")
+        if flask.request.form.has_key("delete"):
             action_id = flask.request.form['id']
             utils.delete_action(action_id)
             flask.flash('Action Deleted')
@@ -398,7 +398,7 @@ def indicator_config():
 
     error = None
     if flask.request.method == 'POST':
-        if flask.request.form.has_key("delete")
+        if flask.request.form.has_key("delete"):
             interface_id = flask.request.form['id']
             utils.delete_interface(interface_id)
             flask.flash('Indicaor Deleted')
