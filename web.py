@@ -15,6 +15,7 @@ app = flask.Flask(__name__)
 @app.before_request
 def before_request():
     flask.g.db = database.get_db()
+    flask.g.title = Config["title"]
 
 
 @app.teardown_request
@@ -397,7 +398,6 @@ def indicator_config():
 if __name__ == "__main__":
     database.init_db()
     app.secret_key = Config["secret"]
-    flask.g.title = Config["title"]
     app.run(
         host=Config["host"],
         port=Config["port"],
