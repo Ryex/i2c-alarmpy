@@ -118,7 +118,7 @@ class IO():
         return (cur >> pin) & 1
 
     def set_mode(self, mode):
-        self.__check_mode(mode)
+        self.__check_value(mode)
         self.iodir.write(mode)
 
     def set_mode_pin(self, pin, mode):
