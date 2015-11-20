@@ -82,7 +82,7 @@
             <div class="i_slot_options_{{ tkey }}" data-show="{{ tkey }}">
                 <select id="inputSlot_{{ tkey }}" class="form-control" name="slot" required>
                     {% for skey in smbio.IOMAP[smbio.IOTYPES[tkey]].SLOTS %}
-                    <option value="{{ skey }}">{{ smbio.IOMAP[tkey].SLOTS[skey] }}</option>
+                    <option value="{{ skey }}">{{ smbio.IOMAP[smbio.IOTYPES[tkey]].SLOTS[skey] }}</option>
                     {% endfor %}
                 </select>
             </div>
