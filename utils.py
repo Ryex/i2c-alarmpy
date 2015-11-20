@@ -1,9 +1,7 @@
 import os
-import time
 import json
 import flask
 import bcrypt
-import database
 
 
 def check_pid(pidfile):
@@ -50,8 +48,8 @@ def get_users(username):
     if rows:
         users = []
         for user in rows:
-            user_id, username = row
-            ios.append({
+            user_id, username = user
+            users.append({
                 "user_id": user_id,
                 "username": username
             })
@@ -84,12 +82,13 @@ def create_user(username, password):
         user)
     flask.g.db.commit()
 
+
 def delete_user(user_id):
     c = flask.g.db.cursor()
     c.execute(
         "delete from user"
         "where user_id = ?;",
-        io_id)
+        user_id)
     flask.g.db.commit()
 
 
@@ -116,6 +115,9 @@ def get_last_manager_state():
         "order by state_time DESC limit 1;")
     state = c.fetchone()
     if state:
+        return state
+    return (None, None)
+
 
 def get_ios():
     c = flask.g.db.cursor()
