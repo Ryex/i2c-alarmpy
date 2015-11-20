@@ -24,7 +24,6 @@ class AlarmManager:
         }
 
     def start_alarm(self, reason):
-        print("starting alarm thread")
         self.alarm.start()
         self.log("Alarm thread start command sent: " + reason)
 
@@ -67,11 +66,9 @@ class AlarmManager:
                 self.log("Error in manager Main loop", err)
 
     def process_cmd(self, cmd_id, data):
-        print("command", data)
         self.clear_cmd(cmd_id)
         if isinstance(data, dict):
             for key in data:
-                print("cmd key", key)
                 if key in self.COMMANDS:
                     func = self.COMMANDS[key]
                     func(data[key])
@@ -269,9 +266,8 @@ class Alarm:
             self.interfaces = None
 
     def start(self):
-        print("from alarm, thread starting")
         if not self._running:
-            if self.thread is not None:
+            if self.thread is None:
                 self.thread = threading.Thread(target=self.run)
                 self._running = True
                 self.configure()
@@ -289,7 +285,6 @@ class Alarm:
                 raise RuntimeError("No ios configured")
             if self.interfaces is None:
                 raise RuntimeError("No interfaces configured")
-            print("from alarm thread, starting main")
             self.main()
         except Exception as err:
             self.log("Error running alarm main thread", error=err)
@@ -312,7 +307,6 @@ class Alarm:
     def main(self):
         self.log("Alarm main loop starting")
         while self._running:
-            print("alarm thread main loop")
             self.update()
             time.sleep(Config["alarm_sleep"])
         self.log("Alarm main loop stoped")

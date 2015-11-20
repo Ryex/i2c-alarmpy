@@ -23,5 +23,10 @@ def write_log(message, error=False, alarm=False):
         db.cursor().execute(
             "insert into log "
             "(error, alarm, message, log_time) "
-            "values (%d, %d,' %s', %d);"
-            % (error, alarm, message, time.time()))
+            "values (:error, :alarm, ':message', :time);",
+            {
+                "error": error,
+                "alarm": alarm,
+                "message": message,
+                "time": time.time()
+            })
