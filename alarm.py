@@ -331,16 +331,19 @@ class Alarm:
             func = self.ACTIONS[cmd]
             func(res + " " + reason)
 
-    def process_input(self, data):
-        self.log("got input: %s" % (data,))
-        for key in self.actions:
-            action = self.actions[key]
-            if bcrypt.hashpw(data, action["code_hash"]) == action["code_hash"]:
-                self.process_action(action["data"])
-                break
+    def process_input(self, data, interface):
+        if data:
+            self.log("got input from interface %s: %s" % (interface.pid, data))
+            for key in self.actions:
+                action = self.actions[key]
+                code_hash = action["code_hash"]
+                if bcrypt.hashpw(data, code_hash) == code_hash:
+                    self.process_action(action["data"])
+                    break
 
     def process_switch(self, state, interface):
-        self.trip("Switch on interface %s tripped" % (interface.pid,))
+        if state:
+            self.trip("Switch on interface %s tripped" % (interface.pid,))
 
 
 def write_pid():
