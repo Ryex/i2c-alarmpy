@@ -39,11 +39,9 @@ def get_user(username):
     return None
 
 
-def get_users(username):
+def get_users():
     c = flask.g.db.cursor()
-    c.execute(
-        "select user_id, username from user where username = ?;",
-        (username,))
+    c.execute("select user_id, username from user order by user_id ASC;")
     rows = c.fetchall()
     if rows:
         users = []
