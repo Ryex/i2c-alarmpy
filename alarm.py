@@ -139,7 +139,7 @@ class Alarm:
 
     def is_running(self):
         if self.thread is not None:
-            return self.tjread.is_alive()
+            return self.thread.is_alive()
         return False
 
     def arm(self, reason):
