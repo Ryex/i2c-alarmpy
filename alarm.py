@@ -306,7 +306,7 @@ class Alarm:
         self.update_state()
         states = {}
         for key in self.interfaces:
-            interface = self.inerfaces[key]
+            interface = self.interfaces[key]
             self.process_interface(interface, interface.update())
             states[key] = interface.get_state()
         self.log_state(states)
