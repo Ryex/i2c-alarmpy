@@ -399,8 +399,8 @@ def indicator_config():
     error = None
     if flask.request.method == 'POST':
         if "delete" in flask.request.form:
-            interface_id = int(flask.request.form['id'])
-            utils.delete_interface(interface_id)
+            indicator_id = int(flask.request.form['id'])
+            utils.delete_indicator(indicator_id)
             flask.flash('Indicaor Deleted')
         else:
             interface_id = int(flask.request.form["interface_id"])
