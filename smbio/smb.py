@@ -51,7 +51,8 @@ class Data:
         self.bus.write_byte_data(self.addr, self.com, value << self.offset)
 
     def read(self):
-        return self.bus.read_byte_data(self.addr, self.com) >> self.offset
+        value = self.bus.read_byte_data(self.addr, self.com) & 0xff
+        return value >> self.offset
 
 
 class IO():
@@ -125,11 +126,9 @@ class IO():
         self.iodir.write(mode)
 
     def set_mode_pin(self, pin, mode):
-        print(pin, mode)
         self.__check_pin(pin)
         self.__check_mode(mode)
         cur = self.get_mode()
-        print(bin(cur))
         new = cur ^ ((-mode ^ cur) & (1 << pin))
         self.set_mode(new)
 
