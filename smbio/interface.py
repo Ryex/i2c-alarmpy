@@ -69,7 +69,8 @@ class Keypad4x4Matrix(Peripheral):
             self.io.set_mode(0b00001111)
         else:
             self.io.set_mode(0b11110000)
-        self.last = time.time()
+        self.last_t = time.time()
+        self.last_s = ""
         self.in_string = ""
 
     def read(self):
@@ -107,21 +108,23 @@ class Keypad4x4Matrix(Peripheral):
         now = time.time()
         if s:
             flag = False
-            if self.last:
-                last_s, last_t = self.last
-                if s == last_s:
-                    if (now - last_t) * 1000 > self.repeat:
+            if self.last_s:
+                if s == self.last_s:
+                    if (now - self.last_t) * 1000 > self.repeat:
                         flag = True
                 else:
                     flag = True
             else:
                 flag = True
             if flag:
+                self.last_s = s
+                self.last_t = now
                 self.in_string += s
-                self.last = now
         else:
-            if now - self.last > self.timeout:
+            if now - self.last_t > self.timeout:
                 self.in_string = ""
+                self.last_s = ""
+                self.last_t = now
 
     def get_code(self, code):
         match = self.CODE_RE.match(code)
