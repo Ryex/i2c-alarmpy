@@ -29,7 +29,7 @@
                     <td>
                         <form method="POST" action="{{ url_for('action_config') }}">
                             <input type="hidden" name="id" value="{{ action['action_id'] }}">
-                            <button class="btn btn-primary btn-block" name="delete" type="submit">
+                            <button class="btn btn-primary btn-block" name="delete" value="true" type="submit">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             </button>
                         </form>
