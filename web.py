@@ -98,7 +98,7 @@ def users():
     if flask.request.method == 'POST':
         if "delete" in flask.request.form:
             if len(utils.get_users()) > 1:
-                user_id = flask.request.form['id']
+                user_id = int(flask.request.form['id'])
                 utils.delete_user(user_id)
                 flask.flash('User Deleted')
             else:
@@ -309,11 +309,11 @@ def io_config():
     error = None
     if flask.request.method == 'POST':
         if "delete" in flask.request.form:
-            io_id = flask.request.form['id']
+            io_id = int(flask.request.form['id'])
             utils.delete_io(io_id)
             flask.flash('IO Deleted')
         else:
-            io_type = flask.request.form['type']
+            io_type = int(flask.request.form['type'])
             bus = int(flask.request.form['bus'])
             addr = int(flask.request.form['addr'], 16)
             utils.create_io(io_type, bus, addr)
@@ -337,17 +337,16 @@ def interface_config():
     error = None
     if flask.request.method == 'POST':
         if "delete" in flask.request.form:
-            interface_id = flask.request.form['id']
+            interface_id = int(flask.request.form['id'])
             utils.delete_interface(interface_id)
             flask.flash('Interface Deleted')
         else:
-            interface_type = flask.request.form['type']
+            interface_type = int(flask.request.form['type'])
             io_id = int(flask.request.form['io_id'])
             slot = int(flask.request.form['slot'])
             datamap = smbio.INTERFACEDATAMAP[interface_type]
             data = {}
             for key in datamap:
-                print("pulling key '%s' from %s", (key, list(flask.request.form.keys())))
                 data[key] = flask.request.form[key]
             utils.create_interface(interface_type, io_id, slot, data)
             flask.flash('Interface Created')
@@ -372,7 +371,7 @@ def action_config():
     error = None
     if flask.request.method == 'POST':
         if "delete" in flask.request.form:
-            action_id = flask.request.form['id']
+            action_id = int(flask.request.form['id'])
             utils.delete_action(action_id)
             flask.flash('Action Deleted')
         else:
@@ -400,12 +399,12 @@ def indicator_config():
     error = None
     if flask.request.method == 'POST':
         if "delete" in flask.request.form:
-            interface_id = flask.request.form['id']
+            interface_id = int(flask.request.form['id'])
             utils.delete_interface(interface_id)
             flask.flash('Indicaor Deleted')
         else:
-            interface_id = flask.request.form["interface_id"]
-            state = flask.request.form["state"]
+            interface_id = int(flask.request.form["interface_id"])
+            state = int(flask.request.form["state"])
             utils.create_indicator(interface_id, state)
             flask.flash('Indicator Created')
 
