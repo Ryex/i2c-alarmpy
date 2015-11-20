@@ -24,7 +24,7 @@
                 {% for indicator in indicators %}
                 <tr>
                     <td>{{ indicator["indicator_id"] }}</td>
-                    <td>{{ idcicator["interface_id"] }}</td>
+                    <td>{{ indicator["interface_id"] }}</td>
                     <td>{{ indicator["state"] }}</td>
                     <td>
                         <form method="POST" action="{{ url_for('indicator_config') }}">

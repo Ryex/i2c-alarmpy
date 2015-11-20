@@ -24,7 +24,7 @@
                 {% for action in actions %}
                 <tr>
                     <td>{{ action["action_id"] }}</td>
-                    <td>{{ action["action"] }}</td>
+                    <td>{{ action["command"] }}</td>
                     <td>{{ action["reason"] }}</td>
                     <td>
                         <form method="POST" action="{{ url_for('action_config') }}">
