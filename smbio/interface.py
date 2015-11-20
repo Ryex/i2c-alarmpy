@@ -105,6 +105,8 @@ class Keypad4x4Matrix(Peripheral):
 
     def update_input(self):
         s = self.read()
+        if s:
+            print("INPUT:", s)
         now = time.time()
         if s:
             flag = False
