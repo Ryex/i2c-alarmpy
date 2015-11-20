@@ -3,7 +3,7 @@
     "host": "0.0.0.0",
     "port": 65432,
     "debug": false,
-    "triped_timeout": 30,
+    "tripped_timeout": 30,
     "falted_timeout": 10,
     "secret": "ChangeMeNow",
     "title": "Alarm System",

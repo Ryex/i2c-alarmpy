@@ -29,8 +29,8 @@ if "port" not in Config:
 if "debug" not in Config:
     Config["debug"] = False
 
-if "triped_timeout" not in Config:
-    Config["triped_timeout"] = 30
+if "tripped_timeout" not in Config:
+    Config["tripped_timeout"] = 30
 
 if "falted_timeout" not in Config:
     config["falted_timeout"] = 10
