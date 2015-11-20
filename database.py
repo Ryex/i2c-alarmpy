@@ -30,3 +30,4 @@ def write_log(message, error=False, alarm=False):
                 "message": message,
                 "time": time.time()
             })
+        db.commit()
