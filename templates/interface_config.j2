@@ -58,7 +58,7 @@
             <div class="i_type_options_{{ tkey }}" data-show="{{ tkey }}">
                 {% for dkey in smbio.INTERFACEDATAMAP[tkey] %}
                     {% set itype_data = smbio.INTERFACEDATAMAP[tkey][dkey] %}
-                    <label for="input_{{ dkey }}" class="sr-only">{{ dkey }}/label>
+                    <label for="input_{{ dkey }}" class="sr-only">{{ dkey }}({{ itype_data }})</label>
                     {% if itype_data == 'int' %}
                     <input type="number" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" >
                     {% elif itype_data == 'pin' %}
