@@ -69,7 +69,7 @@ class Keypad4x4Matrix(Peripheral):
             self.io.set_mode(0b00001111)
         else:
             self.io.set_mode(0b11110000)
-        self.last = None
+        self.last = time.time()
         self.in_string = ""
 
     def read(self):
