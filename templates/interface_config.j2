@@ -100,7 +100,7 @@
         </form>
         <script type="text/javascript">
         $( document ).ready(function() {
-            $('select.div-toggle').change(move_options)
+            $('select.div-toggle').change(move_options).trigger('change');
         });
         </script>
     </div> <!-- /container -->
