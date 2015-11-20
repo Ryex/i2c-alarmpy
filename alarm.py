@@ -171,7 +171,7 @@ class Alarm:
             self.interfaces[indicator["interface"]].update_state(
                 indicator["state"] == self.state)
 
-    def update_triped(self):
+    def update_tripped(self):
         now = time.time()
         if now - self.last > Config["tripped_timeout"]:
             self.alarm("Tripped timeout")
