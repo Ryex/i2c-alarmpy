@@ -15,32 +15,34 @@
         </div>
         {% endif %}
 
-        {% if flags["alarm"] %}
-        <div class="alert alert-danger" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            An alarm has been triggered.
-        </div>
-        {% elif flags["tripped"] %}
-        <div class="alert alert-warning" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            A detector has tripped, but an alarm has not yet been triggered.
-        </div>
-        {% elif flags["falted"] %}
-        <div class="alert alert-warning" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            Your system is falted and can not be armed.
-        </div>
-        {% elif flags["disarmed"] %}
-        <div class="alert alert-info" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            Your system is disarmed.
-        </div>
-        {% elif flags["armed"] %}
-        <div class="alert alert-success" role="alert">
-            <span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>
-            <span class="sr-only">Error:</span>
-            Your system is armed.
-        </div>
+        {% if thread_state["running"] %}
+            {% if flags["alarm"] %}
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                An alarm has been triggered.
+            </div>
+            {% elif flags["tripped"] %}
+            <div class="alert alert-warning" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                A detector has tripped, but an alarm has not yet been triggered.
+            </div>
+            {% elif flags["falted"] %}
+            <div class="alert alert-warning" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                Your system is falted and can not be armed.
+            </div>
+            {% elif flags["disarmed"] %}
+            <div class="alert alert-info" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                Your system is disarmed.
+            </div>
+            {% elif flags["armed"] %}
+            <div class="alert alert-success" role="alert">
+                <span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Your system is armed.
+            </div>
+            {% endif %}
         {% endif %}
 
         <div class="panel panel-default">
