@@ -2,7 +2,7 @@
     "dbfile": "alarm.db",
     "host": "0.0.0.0",
     "port": 65432,
-    "debug": true,
+    "debug": false,
     "triped_timeout": 30,
     "secret": "ChangeMeNow",
     "title": "Alarm System",
