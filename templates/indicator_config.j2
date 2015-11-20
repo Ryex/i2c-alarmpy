@@ -44,8 +44,8 @@
                 <div class="col-md-3">
                     <label for="inputInterfaceID">Type</label>
                     <select id="inputInterfaceID" class="form-control" name="interface_id" required>
-                        {% for key in interfaces %}
-                        <option value="{{ key }}">{{ key }}</option>
+                        {% for interface in interfaces %}
+                        <option value="{{ interface["interface_id"] }}">{{ interface["interface_id"] }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -53,7 +53,7 @@
                     <label for="inputState">Type</label>
                     <select id="inputState" class="form-control" name="state" required>
                         {% for key in alarm_states %}
-                        <option value="{{ key }}">{{ key }}</option>
+                        <option value="{{ key }}">{{ alarm_states[key] }}</option>
                         {% endfor %}
                     </select>
                 </div>
