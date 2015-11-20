@@ -158,6 +158,7 @@ class Alarm:
             self.log("TRIPPED " + reason)
         elif self.state == Alarm.DISARMED:
             self.state = Alarm.FALT
+            self.log("FALTED " + reason)
             self.last = time.time()
 
     def alarm(self, reason):

@@ -177,7 +177,7 @@ def dashboard():
     state_data = None
 
     state = utils.get_latest_state()
-    if state_data:
+    if state:
         alarm_state, state_data, state_time_i = state
         utime = time.strftime("%c", time.localtime(state_time_i))
         state_text = Alarm.ALARM_STATES[alarm_state]
