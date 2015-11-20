@@ -11,7 +11,7 @@ class Led(Peripheral):
 
     def init(self):
         if "pin" in self.data:
-            self.pin = (self.data["pin"])
+            self.pin = int(self.data["pin"])
         else:
             self.pin = 0
         self._state = 0
