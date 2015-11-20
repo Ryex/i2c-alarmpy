@@ -74,7 +74,7 @@
                 <div class="col-md-3">
                     <form method="POST" action="{{ url_for('disarm') }}">
                     <button class ="form-control btn btn-warning"
-                        {% if not flags["armed"] %}
+                        {% if flags["disarmed"] %}
                         disabled="disabled"
                         {% endif %}
                         type="submit" name="action" value="disarm">Disarm</button>
@@ -83,7 +83,7 @@
                 <div class="col-md-3">
                     <form method="POST" action="{{ url_for('alarm') }}">
                     <button class ="form-control btn btn-danger"
-                        {% if not flags["armed"] %}
+                        {% if flags["alarm"] %}
                         disabled="disabled"
                         {% endif %}
                         type="submit" name="action" value="alarm">Alarm</button>
