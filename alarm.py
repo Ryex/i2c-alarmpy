@@ -232,7 +232,7 @@ class Alarm:
                 "select indicator_id, interface_id, state from indicator;")
             indicators = c.fetchall()
             if indicators:
-                self.indicators = []
+                self.indicators = {}
                 for indicator in indicators:
                     indicator_id, interface_id, state = indicator
                     self.indicators[indicator_id] = {
