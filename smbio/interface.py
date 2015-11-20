@@ -117,7 +117,7 @@ class Keypad4x4Matrix(Peripheral):
             else:
                 flag = True
             if flag:
-                self.string += s
+                self.in_string += s
                 self.last = now
         else:
             if now - self.last > self.timeout:
@@ -131,4 +131,4 @@ class Keypad4x4Matrix(Peripheral):
 
     def update(self):
         self.update_input()
-        return {"input": self.get_code()}
+        return {"input": self.get_code(self.in_string)}

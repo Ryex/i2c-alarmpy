@@ -125,7 +125,7 @@ class Alarm:
         self.ios = None
         self.interfaces = None
         self.MESSAGES = {
-            "input": self.process_imput,
+            "input": self.process_input,
             "switch": self.process_switch
         }
 
@@ -331,7 +331,8 @@ class Alarm:
             func = self.ACTIONS[cmd]
             func(res + " " + reason)
 
-    def process_imput(self, data):
+    def process_input(self, data):
+        self.log("got input: %s" % (data,))
         for key in self.actions:
             action = self.actions[key]
             if bcrypt.hashpw(data, action["code_hash"]) == action["code_hash"]:
