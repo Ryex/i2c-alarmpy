@@ -99,7 +99,7 @@ class IO():
         self.__check_value(value, True)
         cur = self.read_out()
         new = cur ^ ((-value ^ cur) & (1 << pin))
-        self.write(new)
+        self.write_out(new)
 
     def read_out(self):
         return self.olat.read()
