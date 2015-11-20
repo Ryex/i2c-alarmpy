@@ -31,7 +31,7 @@
                     <td>{{ log["log_id"] }}</td>
                     <td>{{ log["error"] }}</td>
                     <td>{{ log["alarm"] }}</td>
-                    <td>{{ log["message"] }}</td>
+                    <td><pre>{{ log["message"] }}</pre></td>
                     <td>{{ log["log_time"]|format_local_time }}</td>
                 </tr>
                 {% endfor %}

@@ -44,7 +44,7 @@ class MCP23017:
     OLATA = 0x14  # Register for outputs on A
     OLATB = 0x15  # Register for outputs on B
     GPIOA = 0x12  # Register for inputs on A
-    GPIOA = 0x13  # Register for inputs on B
+    GPIOB = 0x13  # Register for inputs on B
 
     @classmethod
     def create(cls, bus, addr):
