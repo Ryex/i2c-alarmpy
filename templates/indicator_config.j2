@@ -51,7 +51,11 @@
                 </div>
                 <div class="col-md-3">
                     <label for="inputState" class="sr-only">Type</label>
-                    <input type="number" min="0" max="99" id="inputState" class="form-control" name=state required>
+                    <select id="inputState" class="form-control" name="state" required>
+                        {% for key in alarm_states %}
+                        <option value="{{ key }}">{{ key }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="col-md-3"><button class="form-control btn btn-default" type="submit">Add</button></div>
             </div>

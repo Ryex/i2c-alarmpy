@@ -392,7 +392,8 @@ def indicator_config():
         'indicator_config.j2',
         error=error,
         interfaces=interfaces,
-        indicators=indicators)
+        indicators=indicators,
+        alarm_states=Alarm.ALARM_STATES)
 
 
 if __name__ == "__main__":

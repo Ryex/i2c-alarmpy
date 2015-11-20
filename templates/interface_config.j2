@@ -86,8 +86,8 @@
                 <div class="col-md-3">
                     <label for="inputIO" class="sr-only">IO</label>
                     <select id="inputIO" class="form-control" name=io_id required>
-                        {% for key in  ios %}
-                        <option value="{{ ios[key]['io_id'] }}">{{ ios[key]['io_id'] }}</option>
+                        {% for io in  ios %}
+                        <option value="{{ io['io_id'] }}">{{ io['io_id'] }}</option>
                         {% endfor %}
                     </select>
                 </div>
