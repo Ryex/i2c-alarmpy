@@ -20,7 +20,7 @@ INTERFACETYPES = {
 
 IOMAP = {
     "MCP23008": ioexpander.MCP23008,
-    "MCP23018": ioexpander.MCP23017
+    "MCP23017": ioexpander.MCP23017
 }
 
 INTERFACEMAP = {
