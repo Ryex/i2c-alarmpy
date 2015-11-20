@@ -25,7 +25,7 @@
                 <tr>
                     <td>{{ indicator["indicator_id"] }}</td>
                     <td>{{ indicator["interface_id"] }}</td>
-                    <td>{{ indicator["state"] }}</td>
+                    <td>{{ alarm_states[indicator["state"]] }}</td>
                     <td>
                         <form method="POST" action="{{ url_for('indicator_config') }}">
                             <input type="hidden" name="id" value="{{ indicator['indicator_id'] }}">
