@@ -29,9 +29,9 @@
                     <td>{{ io["bus"] }}</td>
                     <td>{{ io["addr_hex"] }}</td>
                     <td>
-                        <form method="DELETE" action="{{ url_for('io_config') }}">
+                        <form method="POST" action="{{ url_for('io_config') }}">
                             <input type="hidden" name="id" value="{{ io['io_id'] }}">
-                            <button class="btn btn-primary btn-block" type="submit">
+                            <button class="btn btn-primary btn-block" name="delete" type="submit">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             </button>
                         </form>

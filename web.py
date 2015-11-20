@@ -87,7 +87,7 @@ def logout():
     return flask.redirect(flask.url_for('login'))
 
 
-@app.route('/users', methods=['GET', 'POST', 'DELETE'])
+@app.route('/users', methods=['GET', 'POST'])
 def users():
     if utils.needs_user():
         return flask.redirect(flask.url_for('setup'))
@@ -96,26 +96,26 @@ def users():
 
     error = None
     if flask.request.method == 'POST':
-        username = flask.request.form['username']
-        user = utils.get_user()
-        if not user:
-            password = flask.request.form['password']
-            password_confirm = flask.request.form['password_confirm']
-            if password == password_confirm:
-                utils.create_user(username, password)
-                flask.flash('User Created')
-                return flask.redirect(flask.url_for('login'))
-            error = "passwords do not match"
+        if "delete" in flask.request.form:
+            if len(utils.get_users()) > 1:
+                user_id = flask.request.form['id']
+                utils.delete_user(user_id)
+                flask.flash('User Deleted')
+            else:
+                flask.flash("can not delete last user")
         else:
-            error = "user already exists"
-    elif flask.request.method == 'DELETE':
-        users = utils.get_users()
-        if len(users) > 1:
-            user_id = flask.request.form['id']
-            utils.delete_user(user_id)
-            flask.flash('User Deleted')
-        else:
-            flask.flash("can not delete last user")
+            username = flask.request.form['username']
+            user = utils.get_user()
+            if not user:
+                password = flask.request.form['password']
+                password_confirm = flask.request.form['password_confirm']
+                if password == password_confirm:
+                    utils.create_user(username, password)
+                    flask.flash('User Created')
+                    return flask.redirect(flask.url_for('login'))
+                error = "passwords do not match"
+            else:
+                error = "user already exists"
 
     users = utils.get_users()
     return flask.render_template(
@@ -299,7 +299,7 @@ def alarm():
 # =================================================
 # Alarm Configuration
 # =================================================
-@app.route("/io", methods=['GET', 'POST', 'DELETE'])
+@app.route("/io", methods=['GET', 'POST'])
 def io_config():
     if utils.needs_user():
         return flask.redirect(flask.url_for('setup'))
@@ -308,15 +308,16 @@ def io_config():
 
     error = None
     if flask.request.method == 'POST':
-        io_type = flask.request.form['type']
-        bus = int(flask.request.form['bus'])
-        addr = int(flask.request.form['addr'], 16)
-        utils.create_io(io_type, bus, addr)
-        flask.flash('IO Created')
-    elif flask.request.method == 'DELETE':
-        io_id = flask.request.form['id']
-        utils.delete_io(io_id)
-        flask.flash('IO Deleted')
+        if "delete" in flask.request.form:
+            io_id = flask.request.form['id']
+            utils.delete_io(io_id)
+            flask.flash('IO Deleted')
+        else:
+            io_type = flask.request.form['type']
+            bus = int(flask.request.form['bus'])
+            addr = int(flask.request.form['addr'], 16)
+            utils.create_io(io_type, bus, addr)
+            flask.flash('IO Created')
 
     ios = utils.get_ios()
     return flask.render_template(
@@ -326,7 +327,7 @@ def io_config():
         smbio=smbio)
 
 
-@app.route("/interface", methods=['GET', 'POST', 'DELETE'])
+@app.route("/interface", methods=['GET', 'POST'])
 def interface_config():
     if utils.needs_user():
         return flask.redirect(flask.url_for('setup'))
@@ -335,19 +336,20 @@ def interface_config():
 
     error = None
     if flask.request.method == 'POST':
-        interface_type = flask.request.form['type']
-        io_id = int(flask.request.form['io_id'])
-        slot = int(flask.request.form['slot'])
-        datamap = smbio.INTERFACEDATAMAP[interface_type]
-        data = {}
-        for key in datamap:
-            data[key] = flask.request.form[key]
-        utils.create_interface(interface_type, io_id, slot, data)
-        flask.flash('Interface Created')
-    elif flask.request.method == 'DELETE':
-        interface_id = flask.request.form['id']
-        utils.delete_interface(interface_id)
-        flask.flash('Interface Deleted')
+        if "delete" in flask.request.form:
+            interface_id = flask.request.form['id']
+            utils.delete_interface(interface_id)
+            flask.flash('Interface Deleted')
+        else:
+            interface_type = flask.request.form['type']
+            io_id = int(flask.request.form['io_id'])
+            slot = int(flask.request.form['slot'])
+            datamap = smbio.INTERFACEDATAMAP[interface_type]
+            data = {}
+            for key in datamap:
+                data[key] = flask.request.form[key]
+            utils.create_interface(interface_type, io_id, slot, data)
+            flask.flash('Interface Created')
 
     interfaces = utils.get_interfaces()
     ios = utils.get_ios()
@@ -359,7 +361,7 @@ def interface_config():
         smbio=smbio)
 
 
-@app.route('/action', methods=['GET', 'POST', 'DELETE'])
+@app.route('/action', methods=['GET', 'POST'])
 def action_config():
     if utils.needs_user():
         return flask.redirect(flask.url_for('setup'))
@@ -368,15 +370,16 @@ def action_config():
 
     error = None
     if flask.request.method == 'POST':
-        code = flask.request.form['code']
-        cmd = flask.request.form['cmd']
-        reason = flask.request.form['reason']
-        utils.create_action(code, cmd, reason)
-        flask.flash('Action Created')
-    elif flask.request.method == 'DELETE':
-        action_id = flask.request.form['id']
-        utils.delete_action(action_id)
-        flask.flash('Action Deleted')
+        if "delete" in flask.request.form:
+            action_id = flask.request.form['id']
+            utils.delete_action(action_id)
+            flask.flash('Action Deleted')
+        else:
+            code = flask.request.form['code']
+            cmd = flask.request.form['cmd']
+            reason = flask.request.form['reason']
+            utils.create_action(code, cmd, reason)
+            flask.flash('Action Created')
 
     actions = utils.get_actions()
     return flask.render_template(
@@ -386,7 +389,7 @@ def action_config():
         commands=Alarm.ACTIONS)
 
 
-@app.route("/indicator", methods=['GET', 'POST', 'DELETE'])
+@app.route("/indicator", methods=['GET', 'POST'])
 def indicator_config():
     if utils.needs_user():
         return flask.redirect(flask.url_for('setup'))
@@ -395,14 +398,15 @@ def indicator_config():
 
     error = None
     if flask.request.method == 'POST':
-        interface_id = flask.request.form["interface_id"]
-        state = flask.request.form["state"]
-        utils.create_indicator(interface_id, state)
-        flask.flash('Indicator Created')
-    elif flask.request.method == 'DELETE':
-        interface_id = flask.request.form['id']
-        utils.delete_interface(interface_id)
-        flask.flash('Indicaor Deleted')
+        if "delete" in flask.request.form:
+            interface_id = flask.request.form['id']
+            utils.delete_interface(interface_id)
+            flask.flash('Indicaor Deleted')
+        else:
+            interface_id = flask.request.form["interface_id"]
+            state = flask.request.form["state"]
+            utils.create_indicator(interface_id, state)
+            flask.flash('Indicator Created')
 
     interfaces = utils.get_interfaces()
     indicators = utils.get_indicators()

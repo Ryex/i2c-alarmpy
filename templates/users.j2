@@ -18,9 +18,9 @@
                     <td>{{ user["user_id"] }}</td>
                     <td>{{ user["username"] }}</td>
                     <td>
-                        <form method="DELETE" action="{{ url_for('users') }}">
+                        <form method="POST" action="{{ url_for('users') }}">
                             <input type="hidden" name="id" value="{{ user['user_id'] }}">
-                            <button class="btn btn-primary btn-block" type="submit">
+                            <button class="btn btn-primary btn-block" name="delete" type="submit">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             </button>
                         </form>
