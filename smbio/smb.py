@@ -45,8 +45,8 @@ class Data:
     def write(self, value):
         if not isinstance(value, int) or value.bit_length() > self.length:
             raise ValueError(
-                "can only write ints with a bit length smaller than %s"
-                % (self.length,)
+                "can only write ints with a bit length "
+                "smaller than {}".format(self.length)
             )
         self.bus.write_byte_data(self.addr, self.com, value << self.offset)
 
@@ -72,22 +72,25 @@ class IO():
 
     def __check_value(self, value, pin=False):
         if not isinstance(value, int):
-            raise ValueError("value must be an int")
+            raise ValueError("value must be an int: {}".format(hex(value)))
         if value < 0x00 or value > 0xFF:
-            raise ValueError("value must be between 0x00 and 0xff")
+            raise ValueError(
+                "value must be between 0x00 and 0xff: {}".format(hex(value)))
         if pin:
             if value.bit_length() > 1:
-                raise ValueError("when setting a pin value must by 1 or 0")
+                raise ValueError(
+                    "when setting a pin "
+                    "value must by 1 or 0: {}".format(hex(value)))
 
     def __check_mode(self, mode):
         if not (mode == IO.READ or mode == IO.WRITE):
-            raise ValueError("mode must be IO.READ or IO.WRITE")
+            raise ValueError(
+                "mode must be IO.READ or IO.WRITE: {}".format(hex(mode)))
 
     def __check_pin(self, pin):
         if pin > IO.PINMAX or pin < IO.PINMIN:
             raise ValueError(
-                "pin must be between %s and %s"
-                % (IO.PINMAX, IO.PINMIN)
+                "pin must be between {} and {}".format(IO.PINMAX, IO.PINMIN)
             )
 
     def write_out(self, value):
