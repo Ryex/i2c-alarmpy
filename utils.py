@@ -181,7 +181,7 @@ def create_interface(interface_type, io_id, slot, data):
     c = flask.g.db.cursor()
     c.execute(
         "insert into interface "
-        "(type, io_id, data) "
+        "(type, io_id, slot, data) "
         "values (:interface_type, :io_id, :slot, :data);",
         {
             "interface_type": interface_type,
