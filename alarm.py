@@ -299,7 +299,6 @@ class Alarm:
         self._running = False
 
     def update(self):
-        self.update_commands()
         if self.state == Alarm.TRIPPED:
             self.update_tripped()
         elif self.state == Alarm.DISARMED:
