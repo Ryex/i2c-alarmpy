@@ -87,8 +87,11 @@ class AlarmManager:
             c.execute(
                 "insert into manager_state "
                 "(state, state_time) "
-                "values (%d, %d);"
-                % (self.alarm._running, time.time()))
+                "values (:state, :time);",
+                {
+                    "state": int(self.alarm.is_running()),
+                    "time": time.time()
+                })
             db.commit()
 
 
@@ -133,6 +136,11 @@ class Alarm:
 
         self.state = 0
         self.last = time.time()
+
+    def is_running(self):
+        if self.thread is not None:
+            return self.tjread.is_alive()
+        return False
 
     def arm(self, reason):
         if self.state == self.DISARMED:

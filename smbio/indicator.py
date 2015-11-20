@@ -11,7 +11,7 @@ class Led(Peripheral):
 
     def init(self):
         if "pin" in self.data:
-            self.pin = self.data["pin"]
+            self.pin = (self.data["pin"])
         else:
             self.pin = 0
         self._state = 0
@@ -47,11 +47,11 @@ class LedBlink(Peripheral):
 
     def init(self):
         if "pin" in self.data:
-            self.pin = self.data["pin"]
+            self.pin = int(self.data["pin"])
         else:
             self.pin = 0
         if "interval" in self.data:
-            self.interval = self.data["interval"]
+            self.interval = int(self.data["interval"])
         else:
             self.interval = 500
         self.last = time.time()
@@ -101,7 +101,7 @@ class Siren(Peripheral):
 
     def init(self):
         if "pin" in self.data:
-            self.pin = self.data["pin"]
+            self.pin = int(self.data["pin"])
         else:
             self.pin = 0
         self._state = 0

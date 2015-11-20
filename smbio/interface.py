@@ -48,17 +48,17 @@ class Keypad4x4Matrix(Peripheral):
 
     def init(self):
         if "order" in self.data:
-            self.order = self.data["order"]
+            self.order = int(self.data["order"])
         else:
             self.order = 1
 
         if "repeat" in self.data:
-            self.repeat = self.data["repeat"]
+            self.repeat = int(self.data["repeat"])
         else:
             self.repeat = 100
 
         if "timeout" in self.data:
-            self.timeout = self.data["timeout"]
+            self.timeout = int(self.data["timeout"])
         else:
             self.timeout = 30
 
