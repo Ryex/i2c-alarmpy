@@ -49,7 +49,7 @@ class AlarmManager:
 
     def main(self):
         self._running = True
-        while self._running():
+        while self._running:
             try:
                 with closing(database.get_db()) as db:
                     c = db.cursor()
