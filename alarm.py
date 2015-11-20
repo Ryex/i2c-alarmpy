@@ -42,7 +42,7 @@ class AlarmManager:
     def log(self, message, error=None):
         timestamp = time.strftime("%Z %Y-%m-%d %H:%M:%S", time.localtime())
         if error:
-            trace = traceback.format_exc(error)
+            trace = traceback.format_exc()
             message += "\n" + trace
         message = timestamp + " " + message
         database.write_log(message, error=(error is not None))
@@ -185,7 +185,7 @@ class Alarm:
                     if t not in smbio.IOTYPES:
                         raise ValueError("invaid io type for io %s" % (io_id,))
                     klass = smbio.IOMAP[smbio.IOTYPES[t]]
-                    self.ios[io_id] = klass.create(smbio.Bus(bus), addr)
+                    self.ios[io_id] = klass.create(smbio.smb.Bus(bus), addr)
 
             c.execute(
                 "select interface_id, type, io_id, slot, data "
@@ -237,7 +237,7 @@ class Alarm:
     def log(self, message, error=None, alarm=False):
         timestamp = time.strftime("%Z %Y-%m-%d %H:%M:%S", time.localtime())
         if error:
-            trace = traceback.format_exc(error)
+            trace = traceback.format_exc()
             message += "\n" + trace
         message = timestamp + " " + message
         database.write_log(message, error=(error is not None), alarm=alarm)
