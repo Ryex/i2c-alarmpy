@@ -99,10 +99,12 @@ def get_latest_state():
     state = c.fetchone()
     running = False
     state_time = None
+    data = None
     if state:
-        tstate, state_time = state
+        tstate, data_s, state_time = state
         running = bool(tstate)
-    return (running, state_time)
+        data = json.loads(data_s)
+    return (running, data, state_time)
 
 
 def get_last_manager_state():
