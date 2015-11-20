@@ -347,6 +347,7 @@ def interface_config():
             datamap = smbio.INTERFACEDATAMAP[interface_type]
             data = {}
             for key in datamap:
+                print("pulling key '%s' from %s", (key, list(flask.request.form.keys())))
                 data[key] = flask.request.form[key]
             utils.create_interface(interface_type, io_id, slot, data)
             flask.flash('Interface Created')
