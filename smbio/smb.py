@@ -101,7 +101,7 @@ class IO():
         self.__check_pin(pin)
         self.__check_value(value, True)
         cur = self.read_out()
-        new = cur ^ ((~value ^ cur) & (1 << pin))
+        new = cur ^ ((~-value ^ cur) & (1 << pin))
         self.write_out(new)
 
     def read_out(self):
@@ -128,7 +128,7 @@ class IO():
         self.__check_pin(pin)
         self.__check_mode(mode)
         cur = self.get_mode()
-        new = cur ^ ((~mode ^ cur) & (1 << pin))
+        new = cur ^ ((~-mode ^ cur) & (1 << pin))
         self.set_mode(new)
 
     def get_mode(self):
