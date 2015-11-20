@@ -31,13 +31,13 @@
                     <td>
                         <table class="table">
                             <tr>
-                            {% for data_key in smbio.INTERFACEDATAMAP[interface["type"]]|dictsort %}
+                            {% for data_key, data_value in smbio.INTERFACEDATAMAP[interface["type"]]|dictsort %}
                                 <th>{{ data_key }}</th>
                             {% endfor %}
                             </tr>
                             <tr>
-                            {% for data_key in interface["data"] %}
-                                <td>{{ interface["data"][data_key] }}</td>
+                            {% for data_key, data_value in interface["data"]|dictsort %}
+                                <td>{{ data_value }}</td>
                             {% endfor %}
                             </tr>
                         </table>
@@ -59,8 +59,7 @@
         <div id="i_type_option_out" class="hide">
             {% for tkey in  smbio.INTERFACETYPES %}
             <div class="i_type_options_{{ tkey }}" data-show="{{ tkey }}">
-                {% for dkey in smbio.INTERFACEDATAMAP[tkey]|dictsort %}
-                    {% set itype_data = smbio.INTERFACEDATAMAP[tkey][dkey] %}
+                {% for dkey, itype_data in smbio.INTERFACEDATAMAP[tkey]|dictsort %}
                     <label for="input_{{ dkey }}">{{ dkey }}({{ itype_data }})</label>
                     {% if itype_data == 'int' %}
                     <input type="number" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" required>
