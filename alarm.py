@@ -36,7 +36,7 @@ class AlarmManager:
         self.log("Alarm thread restart command sent: " + reason)
 
     def action_alarm(self, data):
-        self.alarm.process_action(data["action"], data["reason"])
+        self.alarm.process_command(data["command"], data["reason"])
         self.log("Alarm thread action command sent")
 
     def log(self, message, error=None):
@@ -325,12 +325,10 @@ class Alarm:
                 func = self.MESSAGES[key]
                 func(message[key], interface)
 
-    def process_action(self, action, reason):
-        cmd = action["command"]
-        res = action["reason"]
+    def process_command(self, cmd, reason):
         if cmd in self.ACTIONS:
             func = self.ACTIONS[cmd]
-            func(res + " " + reason)
+            func(reason)
 
     def process_input(self, data, interface):
         if data:
@@ -339,7 +337,9 @@ class Alarm:
                 action = self.actions[key]
                 code_hash = action["code_hash"]
                 if bcrypt.hashpw(data, code_hash) == code_hash:
-                    self.process_action(action["data"])
+                    self.process_command(
+                        action["command"],
+                        action["reason"])
                     break
 
     def process_switch(self, state, interface):

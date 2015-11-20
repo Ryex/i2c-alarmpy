@@ -186,6 +186,7 @@ def dashboard():
         flags["tripped"] = alarm_state == Alarm.TRIPPED
         flags["falted"] = alarm_state == Alarm.FALT
         flags["armed"] = alarm_state == Alarm.ARMED
+        print(state, flags)
 
     interfaces = utils.get_interfaces()
     return flask.render_template(
@@ -277,7 +278,10 @@ def restart():
 @app.route("/arm", methods=['POST'])
 def arm():
     if 'logged_in' in flask.session and flask.session['logged_in']:
-        utils.write_command({"action": {"arm": "Web Interface Arm"}})
+        utils.write_command({"action": {
+            "command": "arm",
+            "reason": "Web Interface Arm"
+        }})
         return flask.redirect(flask.url_for('dashboard'))
     return flask.abort(403)
 
@@ -285,7 +289,10 @@ def arm():
 @app.route("/disarm", methods=['POST'])
 def disarm():
     if 'logged_in' in flask.session and flask.session['logged_in']:
-        utils.write_command({"action": {"disarm": "Web Interface Disarm"}})
+        utils.write_command({"action": {
+            "command": "disarm",
+            "reason": "Web Interface Disarm"
+        }})
         return flask.redirect(flask.url_for('dashboard'))
     return flask.abort(403)
 
@@ -293,7 +300,10 @@ def disarm():
 @app.route("/alarm", methods=['POST'])
 def alarm():
     if 'logged_in' in flask.session and flask.session['logged_in']:
-        utils.write_command({"action": {"alarm": "Web Interface Alarm"}})
+        utils.write_command({"action": {
+            "command": "alarm",
+            "reason": "Web Interface Alarm"
+        }})
         return flask.redirect(flask.url_for('dashboard'))
     return flask.abort(403)
 
