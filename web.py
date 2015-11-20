@@ -168,9 +168,10 @@ def dashboard():
     state_text = "Not Runnning"
     flags = {
         "alarm": False,
+        "armed": False,
         "disarmed": False,
         "tripped": False,
-        "falted": False
+        "falted": False,
     }
 
     state_data = None
@@ -184,6 +185,7 @@ def dashboard():
         flags["disarmed"] = alarm_state == Alarm.DISARMED
         flags["tripped"] = alarm_state == Alarm.TRIPPED
         flags["falted"] = alarm_state == Alarm.FALT
+        flags["armed"] = alarm_state == Alarm.ARMED
 
     interfaces = utils.get_interfaces()
     return flask.render_template(

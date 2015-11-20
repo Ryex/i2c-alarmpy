@@ -2,7 +2,7 @@
 {% block title %}Dashboard{% endblock %}
 {% block body %}
     <div class="container">
-        
+
         {% if not running %}
         <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -35,7 +35,7 @@
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             Your system is disarmed.
         </div>
-        {% else %}
+        {% elif flags["armed"] %}
         <div class="alert alert-success" role="alert">
             <span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
