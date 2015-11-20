@@ -205,7 +205,7 @@ class Alarm:
                         interface_id, self.ios[io_id], data)
 
             c.execute(
-                "select action_id, code_hash, command, reason"
+                "select action_id, code_hash, command, reason "
                 "from action;")
             actions = c.fetchall()
             if actions:

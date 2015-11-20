@@ -86,7 +86,7 @@ def create_user(username, password):
 def delete_user(user_id):
     c = flask.g.db.cursor()
     c.execute(
-        "delete from user"
+        "delete from user "
         "where user_id = ?;",
         user_id)
     flask.g.db.commit()
@@ -142,8 +142,8 @@ def get_ios():
 def create_io(io_type, bus, addr):
     c = flask.g.db.cursor()
     c.execute(
-        "insert into io"
-        "(type, bus, addr)"
+        "insert into io "
+        "(type, bus, addr) "
         "values (:io_type, :bus, :addr);",
         {"io_type": io_type, "bus": bus, "addr": addr})
     flask.g.db.commit()
@@ -152,7 +152,7 @@ def create_io(io_type, bus, addr):
 def delete_io(io_id):
     c = flask.g.db.cursor()
     c.execute(
-        "delete from io"
+        "delete from io "
         "where io_id = ?;",
         io_id)
     flask.g.db.commit()
@@ -181,8 +181,8 @@ def get_interfaces():
 def create_interface(interface_type, io_id, data):
     c = flask.g.db.cursor()
     c.execute(
-        "insert into interface"
-        "(type, io_id, data)"
+        "insert into interface "
+        "(type, io_id, data) "
         "values (:interface_type, :io_id, :data);",
         {
             "interface_type": interface_type,
@@ -195,7 +195,7 @@ def create_interface(interface_type, io_id, data):
 def delete_interface(interface_id):
     c = flask.g.db.cursor()
     c.execute(
-        "delete from interface"
+        "delete from interface "
         "where interface_id = ?;",
         interface_id)
     flask.g.db.commit()
@@ -222,8 +222,8 @@ def get_indicators():
 def create_indicator(interface_id, state):
     c = flask.g.db.cursor()
     c.execute(
-        "insert into indicator"
-        "(interface_id, state)"
+        "insert into indicator "
+        "(interface_id, state) "
         "values (:interface_id, :state);",
         {
             "interface_id": interface_id,
@@ -235,7 +235,7 @@ def create_indicator(interface_id, state):
 def delete_indicator(indicator_id):
     c = flask.g.db.cursor()
     c.execute(
-        "delete from indicator"
+        "delete from indicator "
         "where indicator_id = ?;",
         indicator_id)
     flask.g.db.commit()
@@ -244,8 +244,8 @@ def delete_indicator(indicator_id):
 def get_actions():
     c = flask.g.db.cursor()
     c.execute(
-        "select action_id, code_hash, command, reason"
-        "from action"
+        "select action_id, code_hash, command, reason "
+        "from action "
         "order by action_id ASC;")
     rows = c.fetchall()
     actions = []
@@ -267,8 +267,8 @@ def create_action(code, command, reason):
         ).decode('UTF-8')
     c = flask.g.db.cursor()
     c.execute(
-        "insert into action"
-        "(code_hash, command, reason)"
+        "insert into action "
+        "(code_hash, command, reason) "
         "values (:code_hash, :command, :reason);",
         {
             "code_hash": code_hash,
@@ -281,7 +281,7 @@ def create_action(code, command, reason):
 def delete_action(action_id):
     c = flask.g.db.cursor()
     c.execute(
-        "delete from action"
+        "delete from action "
         "where action_id = ?;",
         action_id)
     flask.g.db.commit()
@@ -290,8 +290,8 @@ def delete_action(action_id):
 def get_logs():
     c = flask.g.db.cursor()
     c.execute(
-        "select log_id, error, alarm, message, log_time"
-        "from log"
+        "select log_id, error, alarm, message, log_time "
+        "from log "
         "order by log_time DESC;")
     rows = c.fetchall()
     logs = []
@@ -310,8 +310,8 @@ def get_logs():
 def get_logs_errors():
     c = flask.g.db.cursor()
     c.execute(
-        "select log_id, error, alarm, message, log_time"
-        "from log where error = 1"
+        "select log_id, error, alarm, message, log_time "
+        "from log where error = 1 "
         "order by log_time DESC;")
     rows = c.fetchall()
     logs = []
@@ -330,8 +330,8 @@ def get_logs_errors():
 def get_logs_alarms():
     c = flask.g.db.cursor()
     c.execute(
-        "select log_id, error, alarm, message, log_time"
-        "from log where alarm = 1"
+        "select log_id, error, alarm, message, log_time "
+        "from log where alarm = 1 "
         "order by log_time DESC;")
     rows = c.fetchall()
     logs = []
@@ -350,8 +350,8 @@ def get_logs_alarms():
 def write_command(cmd):
     c = flask.g.db.cursor()
     c.execute(
-        "insert into cmdq"
-        "(data)"
+        "insert into cmdq "
+        "(data) "
         "values (:data);",
         {
             "data": json.dumps(cmd)
