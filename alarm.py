@@ -200,7 +200,7 @@ class Alarm:
                             "invalid interface type for interface %s"
                             % (interface_id,))
                     data = json.loads(data_s)
-                    klass = smbio.SMBINTERFACEMAP[
+                    klass = smbio.INTERFACEMAP[
                         smbio.INTERFACETYPES[t]
                     ]
                     self.interfaces[interface_id] = klass(
