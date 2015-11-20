@@ -7,10 +7,10 @@
                 <a class="btn btn-default {% if mode == "logs" %}active{% endif %}" href="{{ url_for('logs') }}">Logs</a>
             </div>
             <div class="col-md-3">
-                <a class="btn btn-default {% if mode == "errors" %}active{% endif %}" href="{{ url_for('log_errors') }}">Errors</a>
+                <a class="btn btn-default {% if mode == "errors" %}active{% endif %}" href="{{ url_for('logs_errors') }}">Errors</a>
             </div>
             <div class="col-md-3">
-                <a class="btn btn-default {% if mode == "alarms" %}active{% endif %}" href="{{ url_for('log_alarms') }}">Alarms</a>
+                <a class="btn btn-default {% if mode == "alarms" %}active{% endif %}" href="{{ url_for('logs_alarms') }}">Alarms</a>
             </div>
         </div>
         <div class="panel panel-default">
