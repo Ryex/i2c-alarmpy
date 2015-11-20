@@ -51,12 +51,14 @@ class AlarmManager:
         self._running = True
         while self._running:
             try:
+                print("getting commands")
                 with closing(database.get_db()) as db:
                     c = db.cursor()
                     c.execute("select cmd_id, data from cmdq;")
                     cmds = c.fetchall()
                     if cmds:
                         for cmd in cmds:
+                            print("command", cmd)
                             cmd_id, data_s = cmd
                             data = json.loads(data_s)
                             self.process_cmd(cmd_id, data)
