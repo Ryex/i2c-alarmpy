@@ -32,6 +32,9 @@ if "debug" not in Config:
 if "triped_timeout" not in Config:
     Config["triped_timeout"] = 30
 
+if "falted_timeout" not in Config:
+    config["falted_timeout"] = 10
+
 if "secret" not in Config:
     Config["secret"] = None
 
