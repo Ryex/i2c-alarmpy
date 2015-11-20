@@ -58,7 +58,7 @@
             <div class="i_type_options_{{ tkey }}" data-show="{{ tkey }}">
                 {% for dkey in smbio.INTERFACEDATAMAP[tkey] %}
                     {% set itype_data = smbio.INTERFACEDATAMAP[tkey][dkey] %}
-                    <label for="input_{{ dkey }}" class="sr-only">{{ dkey }}({{ itype_data }})</label>
+                    <label for="input_{{ dkey }}">{{ dkey }}({{ itype_data }})</label>
                     {% if itype_data == 'int' %}
                     <input type="number" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" >
                     {% elif itype_data == 'pin' %}
@@ -76,7 +76,7 @@
         <form method="POST" action="{{ url_for('io_config') }}">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="inputType" class="sr-only">Type</label>
+                    <label for="inputType">Type</label>
                     <select id="inputType" class="form-control div-toggle" name=type data-target="#i_type_options_in" data-bin="i_type_option_out" required>
                         {% for key in  smbio.INTERFACETYPES %}
                         <option value="{{ key }}" data-show=".i_type_options_{{ key }}">{{ smbio.INTERFACETYPES[key] }}</option>
@@ -84,7 +84,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label for="inputIO" class="sr-only">IO</label>
+                    <label for="inputIO">IO</label>
                     <select id="inputIO" class="form-control" name=io_id required>
                         {% for io in  ios %}
                         <option value="{{ io['io_id'] }}">{{ io['io_id'] }}</option>

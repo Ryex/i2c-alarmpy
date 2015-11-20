@@ -42,11 +42,11 @@
         <form method="POST" action="{{ url_for('action_config') }}">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="inputCode" class="sr-only">Code</label>
+                    <label for="inputCode">Code</label>
                     <input type="text" id="inputCode" class="form-control" placeholder="Code" name=code required>
                 </div>
                 <div class="col-md-3">
-                    <label for="inputCmd" class="sr-only">Command</label>
+                    <label for="inputCmd">Command</label>
                     <select id="inputCmd" class="form-control" name=cmd required>
                         {% for key in  commands %}
                         <option value="{{ key }}">{{ commands[key] }}</option>
@@ -54,7 +54,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label for="inputReason" class="sr-only">Hex Address</label>
+                    <label for="inputReason">Reason</label>
                     <input type="text" id="inputReason" class="form-control" placeholder="Reason" name=reason required>
                 </div>
                 <div class="col-md-3"><button class="form-control btn btn-default" type="submit">Add</button></div>

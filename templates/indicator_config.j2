@@ -42,7 +42,7 @@
         <form method="POST" action="{{ url_for('indicator_config') }}">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="inputInterfaceID" class="sr-only">Type</label>
+                    <label for="inputInterfaceID">Type</label>
                     <select id="inputInterfaceID" class="form-control" name="interface_id" required>
                         {% for key in interfaces %}
                         <option value="{{ key }}">{{ key }}</option>
@@ -50,7 +50,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label for="inputState" class="sr-only">Type</label>
+                    <label for="inputState">Type</label>
                     <select id="inputState" class="form-control" name="state" required>
                         {% for key in alarm_states %}
                         <option value="{{ key }}">{{ key }}</option>
