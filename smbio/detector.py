@@ -18,7 +18,7 @@ class Switch(Peripheral):
 
     def read(self):
         self.init()
-        self._state = self.io.read_in()
+        self._state = self.io.read_in_pin(self.pin)
         return self._state
 
     def update(self):
