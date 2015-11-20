@@ -160,7 +160,7 @@ def dashboard():
         tutime_s = time.strftime("%c", time.localtime(tutime))
 
     thread_state = {
-        "running": trunning,
+        "running": bool(trunning),
         "utime": tutime_s
     }
 
@@ -186,7 +186,6 @@ def dashboard():
         flags["tripped"] = alarm_state == Alarm.TRIPPED
         flags["falted"] = alarm_state == Alarm.FALT
         flags["armed"] = alarm_state == Alarm.ARMED
-        print(state, flags)
 
     interfaces = utils.get_interfaces()
     return flask.render_template(

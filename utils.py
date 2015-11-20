@@ -97,14 +97,13 @@ def get_latest_state():
         "from state "
         "order by state_time DESC limit 1;")
     state = c.fetchone()
-    running = False
+    istate = None
     state_time = None
     data = None
     if state:
-        tstate, data_s, state_time = state
-        running = bool(tstate)
+        istate, data_s, state_time = state
         data = json.loads(data_s)
-    return (running, data, state_time)
+    return (istate, data, state_time)
 
 
 def get_last_manager_state():
