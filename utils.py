@@ -159,33 +159,35 @@ def delete_io(io_id):
 def get_interfaces():
     c = flask.g.db.cursor()
     c.execute(
-        "select interface_id, type, io_id, data "
+        "select interface_id, type, io_id, slot, data "
         "from interface "
         "order by interface_id ASC;")
     rows = c.fetchall()
     interfaces = []
     for row in rows:
-        interface_id, interface_type, io_id, data_s = row
+        interface_id, interface_type, io_id, slot, data_s = row
         data = json.loads(data_s)
         interfaces.append({
             "interface_id": interface_id,
             "type": interface_type,
             "io_id": io_id,
+            "slot": slot,
             "data": data
         })
     return interfaces
 
 
-def create_interface(interface_type, io_id, data):
+def create_interface(interface_type, io_id, slot, data):
     c = flask.g.db.cursor()
     c.execute(
         "insert into interface "
         "(type, io_id, data) "
-        "values (:interface_type, :io_id, :data);",
+        "values (:interface_type, :io_id, :slot, :data);",
         {
             "interface_type": interface_type,
             "io_id": io_id,
-            "data": json.dumps(data)
+            "slot": slot,
+            "data": json.dumps(data),
         })
     flask.g.db.commit()
 

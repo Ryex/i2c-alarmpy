@@ -19,6 +19,7 @@
                         <th>ID</th>
                         <th>Type</th>
                         <th>IO</th>
+                        <th>Slot</th>
                         <th>Data</th>
                     </tr>
                 {% for interface in interfaces %}
@@ -26,6 +27,7 @@
                     <td>{{ interface["interface_id"] }}</td>
                     <td>{{ smbio.INTERFACETYPES[interface["type"]] }}</td>
                     <td>{{ interface["io_id"] }}</td>
+                    <td>{{ interface["slot"] }}</td>
                     <td>
                         <table>
                             <tr>
@@ -53,6 +55,7 @@
                 </table>
             </div>
         </div>
+
         <div id="i_type_option_out" class="hide">
             {% for tkey in  smbio.INTERFACETYPES %}
             <div class="i_type_options_{{ tkey }}" data-show="{{ tkey }}">
@@ -60,11 +63,11 @@
                     {% set itype_data = smbio.INTERFACEDATAMAP[tkey][dkey] %}
                     <label for="input_{{ dkey }}">{{ dkey }}({{ itype_data }})</label>
                     {% if itype_data == 'int' %}
-                    <input type="number" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" >
+                    <input type="number" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" required>
                     {% elif itype_data == 'pin' %}
-                    <input type="number" min="0" max="7" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" >
+                    <input type="number" min="0" max="7" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" required>
                     {% elif itype_data == 'bool' %}
-                    <select id="input_{{ dkey }}" class="form-control" name="{{ dkey }}">
+                    <select id="input_{{ dkey }}" class="form-control" name="{{ dkey }}" required>
                         <option value="1">True</option>
                         <option value="0">False</option>
                     </select>
@@ -73,6 +76,19 @@
             </div>
             {% endfor %}
         </div>
+
+        <div id="i_slot_option_out" class="hide">
+            {% for tkey in  smbio.IOTYPES %}
+            <div class="i_slot_options_{{ tkey }}" data-show="{{ tkey }}">
+                <select id="inputSlot_{{ tkey }}" class="form-control" name="slot" required>
+                    {% for skey in smbio.IOMAP[tkey].SLOTS %}
+                    <option value="{{ skey }}">{{ smbio.IOMAP[tkey].SLOTS[skey] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endfor %}
+        </div>
+
         <form method="POST" action="{{ url_for('io_config') }}">
             <div class="row">
                 <div class="col-md-3">
@@ -85,11 +101,14 @@
                 </div>
                 <div class="col-md-3">
                     <label for="inputIO">IO</label>
-                    <select id="inputIO" class="form-control" name=io_id required>
+                    <select id="inputIO" class="form-control div-toggle" name=io_id data-target="#i_slot_options_in" data-bin="i_slot_option_out" required>
                         {% for io in  ios %}
-                        <option value="{{ io['io_id'] }}">{{ io['io_id'] }}</option>
+                        <option value="{{ io['io_id'] }}" data-show=".i_slot_options_{{ io['type'] }}" >{{ io['io_id'] }}</option>
                         {% endfor %}
                     </select>
+                    <div id="i_slot_options_in" class="col-md-3">
+
+                    </div>
                 </div>
                 <div id="i_type_options_in" class="col-md-3">
 

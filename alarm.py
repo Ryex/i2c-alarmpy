@@ -185,14 +185,16 @@ class Alarm:
                     if t not in smbio.IOTYPES:
                         raise ValueError("invaid io type for io %s" % (io_id,))
                     klass = smbio.IOMAP[smbio.IOTYPES[t]]
-                    self.ios[io_id] = klass(smbio.Bus(bus), addr)
+                    self.ios[io_id] = klass.create(smbio.Bus(bus), addr)
 
-            c.execute("select interface_id, type, io_id, data from interface;")
+            c.execute(
+                "select interface_id, type, io_id, slot, data "
+                "from interface;")
             interfaces = c.fetchall()
             if interfaces:
                 self.interfaces = {}
                 for interface in interfaces:
-                    interface_id, t, io_id, data_s = interface
+                    interface_id, t, io_id, slot, data_s = interface
                     if t not in smbio.INTERFACETYPES:
                         raise ValueError(
                             "invalid interface type for interface %s"
@@ -202,7 +204,7 @@ class Alarm:
                         smbio.INTERFACETYPES[t]
                     ]
                     self.interfaces[interface_id] = klass(
-                        interface_id, self.ios[io_id], data)
+                        interface_id, self.ios[io_id][slot], data)
 
             c.execute(
                 "select action_id, code_hash, command, reason "

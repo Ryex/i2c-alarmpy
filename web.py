@@ -327,11 +327,12 @@ def interface_config():
     if flask.request.method == 'POST':
         interface_type = flask.request.form['type']
         io_id = int(flask.request.form['io_id'])
+        slot = int(flask.request.form['slot'])
         datamap = smbio.INTERFACEDATAMAP[interface_type]
         data = {}
         for key in datamap:
             data[key] = flask.request.form[key]
-        utils.create_interface(interface_type, io_id, data)
+        utils.create_interface(interface_type, io_id, slot, data)
         flask.flash('Interface Created')
     elif flask.request.method == 'DELETE':
         interface_id = flask.request.form['id']

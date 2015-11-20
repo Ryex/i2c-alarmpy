@@ -8,6 +8,10 @@ class MCP23008:
     linked to the 8 gpio pins of a MCP23008
     '''
 
+    SLOTS = {
+        0: "A"
+    }
+
     IODIR = 0x00  # Pin direction register
     GPIO = 0x09  # Register for inputs
     OLAT = 0x0A  # Register for outputs
@@ -24,11 +28,16 @@ class MCP23008:
         )
 
 
-class MCP23017(IO):
+class MCP23017:
     '''
     call create to return a IOGroup with two IOs
     linked to the 16 gpio pins of a MCP23017
     '''
+
+    SLOTS = {
+        0: "A",
+        1: "B"
+    }
 
     IODIRA = 0x00  # Pin direction register for A
     IODIRB = 0x01  # Pin direction register for B

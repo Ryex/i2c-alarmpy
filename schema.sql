@@ -11,15 +11,16 @@ create table if not exists cmdq (
 
 create table if not exists io (
     io_id integer primary key autoincrement,
-    type integer  not null,
+    type integer not null,
     bus integer not null,
-    addr integer  not null
+    addr integer not null
 );
 
 create table if not exists interface (
     interface_id integer primary key autoincrement,
-    type integer  not null,
-    io_id integer  not null,
+    type integer not null,
+    io_id integer not null,
+    slot integer not null,
     data text not null
 );
 
