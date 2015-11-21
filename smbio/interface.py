@@ -30,6 +30,8 @@ class Keypad4x4Matrix(Peripheral):
         0b00000001: 3
     }
 
+    BLANK = 0b00000000
+
     CODE_RE = re.compile("^\*(.+?)#$")
 
     def __check_matrix(self, matrix):
@@ -100,7 +102,11 @@ class Keypad4x4Matrix(Peripheral):
         rows = []
         for i in range(4):
             self.io.write_out(columns[i])
+            time.sleep(0.001)
             rows.append(self.io.read_in())
+            self.io.write_out(self.BLANK)
+            time.sleep(0.001)
+            time.sleep()
         return rows
 
     def update_input(self):
