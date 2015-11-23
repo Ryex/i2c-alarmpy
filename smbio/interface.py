@@ -64,8 +64,10 @@ class Keypad4x4Matrix(Peripheral):
             key = self.io.read_in() >> 4
             if (key) != 0b1111:
                 row = self.DECODE[key]
-                while (self.io.read_in() >> 4) != 15:
+                count = 0
+                while (self.io.read_in() >> 4) != 15 and count < 10:
                     time.sleep(0.01)
+                    count += 1
                 if self.upsidedown == 0:
                     return self.matrix[col][row]  # keypad right side up
                 else:
