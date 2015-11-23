@@ -32,9 +32,9 @@ class Keypad4x4Matrix(Peripheral):
 
     def init(self):
         if "upsidedown" in self.data:
-            self.order = bool(self.data["upsidedown"])
+            self.upsidedown = bool(self.data["upsidedown"])
         else:
-            self.order = 1
+            self.upsidedown = False
 
         if "repeat" in self.data:
             self.repeat = int(self.data["repeat"])

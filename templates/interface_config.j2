@@ -67,8 +67,8 @@
                     <input type="number" min="0" max="7" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" required>
                     {% elif itype_data == 'bool' %}
                     <select id="input_{{ dkey }}" class="form-control" name="{{ dkey }}" required>
-                        <option value="1">True</option>
                         <option value="0">False</option>
+                        <option value="1">True</option>
                     </select>
                     {% endif %}
                 {% endfor %}
