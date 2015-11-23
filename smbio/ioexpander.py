@@ -15,6 +15,7 @@ class MCP23008:
     IODIR = 0x00  # Pin direction register
     GPIO = 0x09  # Register for inputs
     OLAT = 0x0A  # Register for outputs
+    GPPU = 0x6
 
     @classmethod
     def create(cls, bus, addr):
@@ -24,7 +25,7 @@ class MCP23008:
             "MCP23008",
             bus,
             addr,
-            [IO(bus, addr, cls.IODIR, cls.GPIO, cls.OLAT)]
+            [IO(bus, addr, cls.IODIR, cls.GPIO, cls.OLAT, cls.GPPU)]
         )
 
 
@@ -45,6 +46,8 @@ class MCP23017:
     OLATB = 0x15  # Register for outputs on B
     GPIOA = 0x12  # Register for inputs on A
     GPIOB = 0x13  # Register for inputs on B
+    GPPUA = 0x0C  # internal pull up on A
+    GPPUB = 0x0D  # internal pull up on B
 
     @classmethod
     def create(cls, bus, addr):
@@ -55,7 +58,7 @@ class MCP23017:
             bus,
             addr,
             [
-                IO(bus, addr, cls.IODIRA, cls.GPIOA, cls.OLATA),
-                IO(bus, addr, cls.IODIRB, cls.GPIOB, cls.OLATB)
+                IO(bus, addr, cls.IODIRA, cls.GPIOA, cls.OLATA, cls.GPPUA),
+                IO(bus, addr, cls.IODIRB, cls.GPIOB, cls.OLATB, cls.GPPUB)
             ]
         )

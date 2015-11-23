@@ -65,7 +65,7 @@
                 <div class="col-md-3">
                     <form method="POST" action="{{ url_for('arm') }}">
                     <button class ="form-control btn btn-success"
-                        {% if not flags["disarmed"] %}
+                        {% if not thread_state["running"] or not flags["disarmed"]%}
                         disabled="disabled"
                         {% endif %}
                         type="submit" name="action" value="arm">Arm</button>
@@ -74,7 +74,7 @@
                 <div class="col-md-3">
                     <form method="POST" action="{{ url_for('disarm') }}">
                     <button class ="form-control btn btn-warning"
-                        {% if flags["disarmed"] %}
+                        {% if not thread_state["running"] or flags["disarmed"] %}
                         disabled="disabled"
                         {% endif %}
                         type="submit" name="action" value="disarm">Disarm</button>
@@ -83,7 +83,7 @@
                 <div class="col-md-3">
                     <form method="POST" action="{{ url_for('alarm') }}">
                     <button class ="form-control btn btn-danger"
-                        {% if flags["alarm"] %}
+                        {% if not thread_state["running"] or flags["alarm"] %}
                         disabled="disabled"
                         {% endif %}
                         type="submit" name="action" value="alarm">Alarm</button>

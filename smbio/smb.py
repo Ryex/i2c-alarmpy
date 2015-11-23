@@ -75,7 +75,7 @@ class IO():
     PINMIN = 0
     PINMAX = 7
 
-    def __init__(self, bus, addr, iodir, gpio, olat):
+    def __init__(self, bus, addr, iodir, gpio, olat, pullup):
         if not isinstance(bus, smbus.SMBus):
             raise ValueError("bus must be an SMBus instance")
         self.bus = bus
@@ -83,6 +83,7 @@ class IO():
         self.iodir = Data(bus, self.addr, iodir)
         self.olat = Data(bus, self.addr, olat)
         self.gpio = Data(bus, self.addr, gpio)
+        self.pullup = Data(bus, self.addr, pullup)
 
     def __check_value(self, value, pin=False):
         if not isinstance(value, int):
@@ -148,10 +149,28 @@ class IO():
     def get_mode(self):
         return self.iodir.read()
 
-    def get_mode_pin(self, slot, pin):
-        self.__check_slot(slot)
+    def get_mode_pin(self, pin):
         self.__check_pin(pin)
-        cur = self.get_mode(slot)
+        cur = self.get_mode()
+        return (cur >> pin) & 1
+
+    def set_pullup(self, mode):
+        self.__check_value(mode)
+        self.pullup.write(mode)
+
+    def set_pullup_pin(self, pin, mode):
+        self.__check_pin(pin)
+        self.__check_mode(mode)
+        cur = self.get_pullup()
+        new = cur ^ ((-mode ^ cur) & (1 << pin))
+        self.set_pullup(new)
+
+    def get_pullup(self):
+        return self.pullup.read()
+
+    def get_pullup_pin(self, pin):
+        self.__check_pin(pin)
+        cur = self.get_pullup()
         return (cur >> pin) & 1
 
 

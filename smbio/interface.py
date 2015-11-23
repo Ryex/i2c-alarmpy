@@ -7,75 +7,18 @@ class Keypad4x4Matrix(Peripheral):
 
     DIRECTION = -1
     DATAMAP = {
-        "order": "int",
+        "upsidedown": "bool",
         "repeat": "int",
         "timeout": "int"
     }
 
-    MATRIX = [
-        ["1", "2", "3", "A"],
-        ["4", "5", "6", "B"],
-        ["7", "8", "9", "C"],
-        ["*", "0", "#", "D"]
-    ]
+    MATRIX = [['1', '4', '7', '*'],  # KEYCOL0
+              ['2', '5', '8', '0'],  # KEYCOL1
+              ['3', '6', '9', '#'],  # KEYCOL2
+              ['A', 'B', 'C', 'D']]  # KEYCOL3
 
-    ROW_MASKS = {
-
-        0: {
-            0b00000001: 0,
-            0b00000010: 1,
-            0b00000100: 2,
-            0b00001000: 3
-        },
-        1: {
-            0b00010000: 0,
-            0b00100000: 1,
-            0b01000000: 2,
-            0b10000000: 3
-        },
-        2: {
-            0b00001000: 0,
-            0b00000100: 1,
-            0b00000010: 2,
-            0b00000001: 3
-        },
-        3: {
-            0b00010000: 0,
-            0b00100000: 1,
-            0b01000000: 2,
-            0b10000000: 3
-        }
-
-    }
-
-    COL_MASKS = {
-        0: [
-            0b00010000,
-            0b00100000,
-            0b01000000,
-            0b10000000
-        ],
-        1: [
-            0b00000001,
-            0b00000010,
-            0b00000100,
-            0b00001000
-        ],
-        2: [
-            0b10000000,
-            0b01000000,
-            0b00100000,
-            0b00010000
-        ],
-        3: [
-            0b00001000,
-            0b00000100,
-            0b00000010,
-            0b00000001
-        ]
-    }
-
-    BLANK = 0b00000000
+    KEYCOL = [0b11110111, 0b11111011, 0b11111101, 0b11111110]
+    DECODE = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 3, 0]
 
     CODE_RE = re.compile("^\*(.+?)#$")
 
@@ -87,15 +30,9 @@ class Keypad4x4Matrix(Peripheral):
         except IndexError:
             raise ValueError("matrix must be 4x4")
 
-    def __check_row(self, row):
-        if row in self.ROW_MASKS[self.order]:
-            return self.ROW_MASKS[self.order][row]
-        else:
-            return -1
-
     def init(self):
-        if "order" in self.data:
-            self.order = int(self.data["order"])
+        if "upsidedown" in self.data:
+            self.order = bool(self.data["upsidedown"])
         else:
             self.order = 1
 
@@ -112,33 +49,28 @@ class Keypad4x4Matrix(Peripheral):
         self.matrix = Keypad4x4Matrix.MATRIX
         self.__check_matrix(self.matrix)
 
-        if self.order >= 0:
-            self.io.set_mode(0b00001111)
-        else:
-            self.io.set_mode(0b11110000)
+        self.io.set_mode(0xF0)  # upper 4 bits are inputs
+        self.io.set_pullup(0xF0)  # enable upper 4 bits pullups
+
         self.last_t = time.time()
         self.last_s = ""
         self.in_string = ""
 
     def read(self):
         self.init()
-        columns = self.COL_MASKS[self.order]
-        rows = self.scan(columns)
-        for y in range(4):
-            x = self.__check_row(rows[y])
-            if x >= 0:
-                return self.matrix[x][y]
+        for col in range(0, 4):
+            time.sleep(0.01)
+            self.io.write_out(self.KEYCOL[col])  # write 0 to lowest four bits
+            key = self.io.read_in() >> 4
+            if (key) != 0b1111:
+                row = self.DECODE[key]
+                while (self.io.read_in() >> 4) != 15:
+                    time.sleep(0.01)
+                if self.upsidedown == 0:
+                    return self.matrix[col][row]  # keypad right side up
+                else:
+                    return self.matrix[3 - row][3 - col]  # keypad upside down
         return ""
-
-    def scan(self, columns):
-        rows = []
-        for i in range(4):
-            self.io.write_out(columns[i])
-            time.sleep(0.001)
-            rows.append(self.io.read_in())
-            self.io.write_out(self.BLANK)
-            time.sleep(0.001)
-        return rows
 
     def update_input(self):
         s = self.read()
