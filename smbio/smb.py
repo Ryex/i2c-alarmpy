@@ -18,6 +18,19 @@ class Peripheral:
         self.data = data
         self._state = 0
         self.init()
+        self.message_q = []
+
+    def message(self, message):
+        self.message_q.append(message)
+
+    def pull_messages(self):
+        msgs = []
+        while self.message_q:
+            msgs.append(self.message_q.pop(0))
+        return msgs
+
+    def process_messages(self):
+        pass
 
     def init(self):
         pass

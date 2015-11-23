@@ -309,6 +309,7 @@ class Alarm:
         for key in self.interfaces:
             interface = self.interfaces[key]
             self.process_interface(interface, interface.update())
+            self.process_messages(interface.pull_messages())
             states[key] = interface.get_state()
         self.log_state(states)
 
@@ -324,6 +325,11 @@ class Alarm:
             if key in self.MESSAGES:
                 func = self.MESSAGES[key]
                 func(message[key], interface)
+
+    def process_messages(self, messages):
+        for key in self.interfaces:
+            interface = self.interfaces[key]
+            interface.process_messages(messages)
 
     def process_command(self, cmd, reason):
         if cmd in self.ACTIONS:

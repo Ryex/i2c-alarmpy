@@ -128,6 +128,7 @@ class Keypad4x4Matrix(Peripheral):
                 self.last_s = s
                 self.last_t = now
                 self.in_string += s
+                self.message("buzz")
         else:
             if now - self.last_t > self.timeout:
                 self.in_string = ""
