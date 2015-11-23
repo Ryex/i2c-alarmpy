@@ -32,7 +32,7 @@ class Keypad4x4Matrix(Peripheral):
 
     def init(self):
         if "upsidedown" in self.data:
-            self.upsidedown = bool(self.data["upsidedown"])
+            self.upsidedown = bool(int(self.data["upsidedown"]))
         else:
             self.upsidedown = False
 
@@ -68,7 +68,7 @@ class Keypad4x4Matrix(Peripheral):
                 while (self.io.read_in() >> 4) != 15 and count < 10:
                     time.sleep(0.01)
                     count += 1
-                if self.upsidedown == 0:
+                if self.upsidedown:
                     return self.matrix[col][row]  # keypad right side up
                 else:
                     return self.matrix[3 - row][3 - col]  # keypad upside down
