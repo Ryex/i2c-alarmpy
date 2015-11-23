@@ -137,6 +137,11 @@ class Alarm:
         self.state = 0
         self.last = time.time()
 
+        self.ios = {}
+        self.interfaces = {}
+        self.indicators = {}
+        self.actions = {}
+
     def is_running(self):
         if self.thread is not None:
             return self.thread.is_alive()
