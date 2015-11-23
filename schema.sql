@@ -13,8 +13,7 @@ create table if not exists io (
     io_id integer primary key autoincrement,
     type integer not null,
     bus integer not null,
-    addr integer not null,
-    pullup integer not null
+    addr integer not null
 );
 
 create table if not exists interface (
