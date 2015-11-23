@@ -20,14 +20,20 @@ class Keypad4x4Matrix(Peripheral):
     ]
 
     ROW_MASKS = {
-        0b00010000: 0,
-        0b00100000: 1,
-        0b01000000: 2,
-        0b10000000: 3,
-        0b00001000: 0,
-        0b00000100: 1,
-        0b00000010: 2,
-        0b00000001: 3
+
+        0: {
+            0b00000001: 0,
+            0b00000010: 1,
+            0b00000100: 2,
+            0b00001000: 3
+        },
+        1: {
+            0b00010000: 0,
+            0b00100000: 1,
+            0b01000000: 2,
+            0b10000000: 3
+        }
+
     }
 
     BLANK = 0b00000000
@@ -43,8 +49,8 @@ class Keypad4x4Matrix(Peripheral):
             raise ValueError("matrix must be 4x4")
 
     def __check_row(self, row):
-        if row in self.ROW_MASKS:
-            return self.ROW_MASKS[row]
+        if row in self.ROW_MASKS[self.order]:
+            return self.ROW_MASKS[self.order][row]
         else:
             return -1
 
@@ -79,10 +85,10 @@ class Keypad4x4Matrix(Peripheral):
         self.init()
         if self.order >= 0:
             columns = [
-                0b00001000,
-                0b00000100,
+                0b00000001,
                 0b00000010,
-                0b00000001
+                0b00000100,
+                0b00001000
             ]
         else:
             columns = [
