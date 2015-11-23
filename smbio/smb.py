@@ -29,7 +29,7 @@ class Peripheral:
             msgs.append(self.message_q.pop(0))
         return msgs
 
-    def process_messages(self, ):
+    def process_messages(self, messages):
         pass
 
     def init(self):
