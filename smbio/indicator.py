@@ -127,7 +127,7 @@ class Siren(Peripheral):
             self.off()
 
     def update(self):
-        return {"led": self._state}
+        return {"siren": self._state}
 
 class Buzzer(Peripheral):
 
@@ -189,4 +189,4 @@ class Buzzer(Peripheral):
     def update(self):
         if self.buzzing:
             self.update_buzz()
-        return {"led": self._state}
+        return {"buzzer": self._state}

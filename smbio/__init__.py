@@ -26,6 +26,8 @@ IOMAP = {
 INTERFACEMAP = {
     "Led": indicator.Led,
     "LedBlink": indicator.LedBlink,
+    "Buzzer": indicator.Buzzer,
+    "Siren": indicator.Siren,
     "Switch": detector.Switch,
     "Keypad4x4Matrix": interface.Keypad4x4Matrix
 }
