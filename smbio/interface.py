@@ -7,7 +7,7 @@ class Keypad4x4Matrix(Peripheral):
 
     DIRECTION = -1
     DATAMAP = {
-        "order": "bool",
+        "order": "int",
         "repeat": "int",
         "timeout": "int"
     }
@@ -32,8 +32,47 @@ class Keypad4x4Matrix(Peripheral):
             0b00100000: 1,
             0b01000000: 2,
             0b10000000: 3
+        },
+        2: {
+            0b00001000: 0,
+            0b00000100: 1,
+            0b00000010: 2,
+            0b00000001: 3
+        },
+        3: {
+            0b00010000: 0,
+            0b00100000: 1,
+            0b01000000: 2,
+            0b10000000: 3
         }
 
+    }
+
+    COL_MASKS = {
+        0: [
+            0b00010000,
+            0b00100000,
+            0b01000000,
+            0b10000000
+        ],
+        1: [
+            0b00000001,
+            0b00000010,
+            0b00000100,
+            0b00001000
+        ],
+        2: [
+            0b10000000,
+            0b01000000,
+            0b00100000,
+            0b00010000
+        ],
+        3: [
+            0b00001000,
+            0b00000100,
+            0b00000010,
+            0b00000001
+        ]
     }
 
     BLANK = 0b00000000
@@ -83,20 +122,7 @@ class Keypad4x4Matrix(Peripheral):
 
     def read(self):
         self.init()
-        if self.order >= 0:
-            columns = [
-                0b00000001,
-                0b00000010,
-                0b00000100,
-                0b00001000
-            ]
-        else:
-            columns = [
-                0b00010000,
-                0b00100000,
-                0b01000000,
-                0b10000000
-            ]
+        columns = self.COL_MASKS[self.order]
         rows = self.scan(columns)
         for y in range(4):
             x = self.__check_row(rows[y])
