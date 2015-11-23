@@ -106,7 +106,6 @@ class Keypad4x4Matrix(Peripheral):
             rows.append(self.io.read_in())
             self.io.write_out(self.BLANK)
             time.sleep(0.001)
-            time.sleep()
         return rows
 
     def update_input(self):
