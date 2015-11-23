@@ -179,13 +179,14 @@ def dashboard():
     state = utils.get_latest_state()
     if state:
         alarm_state, state_data, state_time_i = state
-        utime = time.strftime("%c", time.localtime(state_time_i))
-        state_text = Alarm.ALARM_STATES[alarm_state]
-        flags["alarm"] = alarm_state == Alarm.ALARMED
-        flags["disarmed"] = alarm_state == Alarm.DISARMED
-        flags["tripped"] = alarm_state == Alarm.TRIPPED
-        flags["falted"] = alarm_state == Alarm.FALT
-        flags["armed"] = alarm_state == Alarm.ARMED
+        if alarm_state is not None:
+            utime = time.strftime("%c", time.localtime(state_time_i))
+            state_text = Alarm.ALARM_STATES[alarm_state]
+            flags["alarm"] = alarm_state == Alarm.ALARMED
+            flags["disarmed"] = alarm_state == Alarm.DISARMED
+            flags["tripped"] = alarm_state == Alarm.TRIPPED
+            flags["falted"] = alarm_state == Alarm.FALT
+            flags["armed"] = alarm_state == Alarm.ARMED
 
     interfaces = utils.get_interfaces()
     return flask.render_template(
