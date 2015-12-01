@@ -12,13 +12,18 @@ class Keypad4x4Matrix(Peripheral):
         "timeout": "int"
     }
 
-    MATRIX = [['1', '4', '7', '*'],  # KEYCOL0
-              ['2', '5', '8', '0'],  # KEYCOL1
-              ['3', '6', '9', '#'],  # KEYCOL2
-              ['A', 'B', 'C', 'D']]  # KEYCOL3
+    MATRIX = [['1', '2', '3', 'A'],
+              ['4', '5', '6', 'B'],
+              ['7', '8', '9', 'C'],
+              ['*', '0', '#', 'D']]
 
-    KEYCOL = [0b11110111, 0b11111011, 0b11111101, 0b11111110]
-    DECODE = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 3, 0]
+    KEYCOL = [0b0111, 0b1011, 0b1101, 0b1110]
+    DECODE = {
+        0b0111: 0,
+        0b1011: 1,
+        0b1101: 2,
+        0b1110: 3
+    }
 
     CODE_RE = re.compile("^\*(.+?)#$")
 
@@ -62,16 +67,12 @@ class Keypad4x4Matrix(Peripheral):
             time.sleep(0.01)
             self.io.write_out(self.KEYCOL[col])  # write 0 to lowest four bits
             key = self.io.read_in() >> 4
-            if (key) != 0b1111:
+            if key in self.DECODE:
                 row = self.DECODE[key]
-                count = 0
-                while (self.io.read_in() >> 4) != 15 and count < 10:
-                    time.sleep(0.01)
-                    count += 1
                 if self.upsidedown:
-                    return self.matrix[col][row]  # keypad right side up
+                    return self.matrix[row][col]  # keypad right side up
                 else:
-                    return self.matrix[3 - row][3 - col]  # keypad upside down
+                    return self.matrix[3 - col][3 - row]  # keypad upside down
         return ""
 
     def update_input(self):
