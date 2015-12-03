@@ -46,14 +46,7 @@ create table if not exists indicator (
 );
 
 create table if not exists state (
-    state_id integer primary key autoincrement,
-    state integer not null,
+    key text unique primary key,
     data text not null,
-    state_time integer not null
-);
-
-create table if not exists manager_state (
-    state_id integer primary key autoincrement,
-    state integer not null,
     state_time integer not null
 );
