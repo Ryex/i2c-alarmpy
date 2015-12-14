@@ -1,8 +1,4 @@
-try:
-    import smbus
-except ImportError:
-    pass
-
+import smbus
 
 def Bus(bus):
     return smbus.SMBus(bus)
