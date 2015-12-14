@@ -34,8 +34,7 @@ def get_user(username):
         return {
             "user_id": user_id,
             "username": username,
-            "pw_hash": pw_hash
-        }
+            "pw_hash": pw_hash}
     return None
 
 
@@ -49,8 +48,7 @@ def get_users():
             user_id, username = user
             users.append({
                 "user_id": user_id,
-                "username": username
-            })
+                "username": username})
         return users
     return None
 
@@ -58,8 +56,7 @@ def get_users():
 def check_user_pass(user, password):
     pw_hash = bcrypt.hashpw(
         password.encode('UTF-8'),
-        user["pw_hash"].encode('UTF-8')
-    ).decode('UTF-8')
+        user["pw_hash"].encode('UTF-8')).decode('UTF-8')
     if pw_hash == user["pw_hash"]:
         return True
     return False
@@ -70,9 +67,7 @@ def create_user(username, password):
         "username": username,
         "pw_hash": bcrypt.hashpw(
             password.encode('UTF-8'),
-            bcrypt.gensalt()
-        ).decode('UTF-8')
-    }
+            bcrypt.gensalt()).decode('UTF-8')}
     c = flask.g.db.cursor()
     c.execute(
         "insert into user (username, pw_hash) values "
@@ -90,32 +85,53 @@ def delete_user(user_id):
     flask.g.db.commit()
 
 
-def get_latest_state():
+def modify_user(user_id, username, password):
+    user = {
+        "user_id": user_id,
+        "username": username,
+        "pw_hash": bcrypt.hashpw(
+            password.encode('UTF-8'),
+            bcrypt.gensalt()).decode('UTF-8')}
     c = flask.g.db.cursor()
     c.execute(
-        "select state, data, state_time "
-        "from state "
-        "order by state_time DESC limit 1;")
+        "update user "
+        "set username = :username,  pw_hash = :pw_hash "
+        "where user_id = :user_id;",
+        user)
+
+
+def get_state(key):
+    c = flask.g.db.cursor()
+    c.execute(
+        "select data, state_time "
+        "from state where key = ?"
+        "limit 1;",
+        (str(key),))
     state = c.fetchone()
-    istate = None
-    state_time = None
-    data = None
     if state:
-        istate, data_s, state_time = state
+        data_s, state_time = state
         data = json.loads(data_s)
-    return (istate, data, state_time)
+        return (data, state_time)
+    return None
 
 
-def get_last_manager_state():
+def get_states_not(*keys):
     c = flask.g.db.cursor()
+    where_clause = " AND ".join(["key != '{}'"] * len(keys)).format(*keys)
     c.execute(
-        "select state, state_time "
-        "from manager_state "
-        "order by state_time DESC limit 1;")
-    state = c.fetchone()
-    if state:
-        return state
-    return (None, None)
+        "select key, data, state_time "
+        "from state where :where_clause "
+        "order by key DESC;",
+        {"where_clause": where_clause})
+    rows = c.fetchall()
+    states = []
+    for row in rows:
+        r_key, r_data, r_time = row
+        states.append({
+            "key": r_key,
+            "data": json.loads(r_data),
+            "state_time": r_time})
+    return states
 
 
 def get_ios():
@@ -133,8 +149,7 @@ def get_ios():
             "type": io_type,
             "bus": bus,
             "addr": addr,
-            "addr_hex": hex(addr)
-        })
+            "addr_hex": hex(addr)})
     return ios
 
 
@@ -157,6 +172,20 @@ def delete_io(io_id):
     flask.g.db.commit()
 
 
+def modify_io(io_id, io_type, bus, addr):
+    c = flask.g.db.cursor()
+    c.execute(
+        "update io "
+        "set type = :io_type, bus = :bus, addr = :addr "
+        "where io_id = :io_id;",
+        {
+            "io_id": io_id,
+            "io_type": io_type,
+            "bus": bus,
+            "addr": addr})
+    flask.g.db.commit()
+
+
 def get_interfaces():
     c = flask.g.db.cursor()
     c.execute(
@@ -173,8 +202,7 @@ def get_interfaces():
             "type": interface_type,
             "io_id": io_id,
             "slot": slot,
-            "data": data
-        })
+            "data": data})
     return interfaces
 
 
@@ -188,8 +216,7 @@ def create_interface(interface_type, io_id, slot, data):
             "interface_type": interface_type,
             "io_id": io_id,
             "slot": slot,
-            "data": json.dumps(data),
-        })
+            "data": json.dumps(data)})
     flask.g.db.commit()
 
 
@@ -199,6 +226,21 @@ def delete_interface(interface_id):
         "delete from interface "
         "where interface_id = ?;",
         (str(interface_id),))
+    flask.g.db.commit()
+
+
+def modify_interface(interface_id, interface_type, io_id, slot, data):
+    c = flask.g.db.cursor()
+    c.execute(
+        "update interface "
+        "set type = :iface_type, io_id = :io_id, slot = :slot, data = :data "
+        "where interface_id = :iface_id;",
+        {
+            "iface_id": interface_id,
+            "iface_type": interface_type,
+            "io_id": io_id,
+            "slot": slot,
+            "data": json.dumps(data)})
     flask.g.db.commit()
 
 
@@ -215,8 +257,7 @@ def get_indicators():
         indicators.append({
             "indicator_id": indicator_id,
             "interface_id": interface_id,
-            "state": state
-        })
+            "state": state})
     return indicators
 
 
@@ -228,8 +269,7 @@ def create_indicator(interface_id, state):
         "values (:interface_id, :state);",
         {
             "interface_id": interface_id,
-            "state": state
-        })
+            "state": state})
     flask.g.db.commit()
 
 
@@ -239,6 +279,19 @@ def delete_indicator(indicator_id):
         "delete from indicator "
         "where indicator_id = ?;",
         (str(indicator_id),))
+    flask.g.db.commit()
+
+
+def modify_indicator(indicator_id, interface_id, state):
+    c = flask.g.db.cursor()
+    c.execute(
+        "update indicator "
+        "set interface_id = :interface_id, state = :state "
+        "where indicator_id = :indicator_id;",
+        {
+            "indicator_id": indicator_id,
+            "interface_id": interface_id,
+            "state": state})
     flask.g.db.commit()
 
 
@@ -256,8 +309,7 @@ def get_actions():
             "action_id": action_id,
             "code_hash": code_hash,
             "command": command,
-            "reason": reason
-        })
+            "reason": reason})
     return actions
 
 
@@ -274,8 +326,7 @@ def create_action(code, command, reason):
         {
             "code_hash": code_hash,
             "command": command,
-            "reason": reason
-        })
+            "reason": reason})
     flask.g.db.commit()
 
 
@@ -285,6 +336,24 @@ def delete_action(action_id):
         "delete from action "
         "where action_id = ?;",
         (str(action_id),))
+    flask.g.db.commit()
+
+
+def modify_action(action_id, code, command, reason):
+    code_hash = bcrypt.hashpw(
+        code.encode('UTF-8'),
+        bcrypt.gensalt()
+        ).decode('UTF-8')
+    c = flask.g.db.cursor()
+    c.execute(
+        "update action "
+        "set code_hash = :code_hash, command = :command, reason = :reason "
+        "where action_id = :action_id;",
+        {
+            "action_id": action_id,
+            "code_hash": code_hash,
+            "command": command,
+            "reason": reason})
     flask.g.db.commit()
 
 
@@ -303,8 +372,7 @@ def get_logs():
             "error": error,
             "alarm": alarm,
             "message": message,
-            "log_time": log_time
-        })
+            "log_time": log_time})
     return logs
 
 
@@ -323,8 +391,7 @@ def get_logs_errors():
             "error": error,
             "alarm": alarm,
             "message": message,
-            "log_time": log_time
-        })
+            "log_time": log_time})
     return logs
 
 
@@ -343,8 +410,7 @@ def get_logs_alarms():
             "error": error,
             "alarm": alarm,
             "message": message,
-            "log_time": log_time
-        })
+            "log_time": log_time})
     return logs
 
 
@@ -355,6 +421,5 @@ def write_command(cmd):
         "(data) "
         "values (:data);",
         {
-            "data": json.dumps(cmd)
-        })
+            "data": json.dumps(cmd)})
     flask.g.db.commit()

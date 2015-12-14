@@ -1,4 +1,7 @@
-import smbus
+try:
+    import smbus
+except ImportError:
+    pass
 from .smb import IO, IOGroup
 
 
@@ -9,8 +12,7 @@ class MCP23008:
     '''
 
     SLOTS = {
-        0: "A"
-    }
+        0: "A"}
 
     IODIR = 0x00  # Pin direction register
     GPIO = 0x09  # Register for inputs
@@ -25,8 +27,7 @@ class MCP23008:
             "MCP23008",
             bus,
             addr,
-            [IO(bus, addr, cls.IODIR, cls.GPIO, cls.OLAT, cls.GPPU)]
-        )
+            [IO(bus, addr, cls.IODIR, cls.GPIO, cls.OLAT, cls.GPPU)])
 
 
 class MCP23017:
@@ -37,8 +38,7 @@ class MCP23017:
 
     SLOTS = {
         0: "A",
-        1: "B"
-    }
+        1: "B"}
 
     IODIRA = 0x00  # Pin direction register for A
     IODIRB = 0x01  # Pin direction register for B
@@ -59,6 +59,4 @@ class MCP23017:
             addr,
             [
                 IO(bus, addr, cls.IODIRA, cls.GPIOA, cls.OLATA, cls.GPPUA),
-                IO(bus, addr, cls.IODIRB, cls.GPIOB, cls.OLATB, cls.GPPUB)
-            ]
-        )
+                IO(bus, addr, cls.IODIRB, cls.GPIOB, cls.OLATB, cls.GPPUB)])

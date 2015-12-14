@@ -49,3 +49,6 @@ if "manager_sleep" not in Config:
 
 if "alarm_sleep" not in Config:
     Config["alarm_sleep"] = 0
+
+if "auto_arm" not in Config:
+    Config["auto_arm"] = False

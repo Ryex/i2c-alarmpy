@@ -27,9 +27,17 @@
                     <td>{{ action["command"] }}</td>
                     <td>{{ action["reason"] }}</td>
                     <td>
+                        <button class="btn btn-success btn-block btn-edit" name="edit" value="true" type="button" data-id="{{ action['action_id'] }}" data-target="#i_action"
+                            data-values="cmd,code,reason"
+                            data-cmd="{{ action['command'] }}"
+                            data-code=""
+                            data-reason="{{ action['reason'] }}"
+                            >
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        </button>
                         <form method="POST" action="{{ url_for('action_config') }}">
                             <input type="hidden" name="id" value="{{ action['action_id'] }}">
-                            <button class="btn btn-primary btn-block" name="delete" value="true" type="submit">
+                            <button class="btn btn-danger btn-block" name="delete" value="true" type="submit">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             </button>
                         </form>
@@ -39,28 +47,40 @@
                 </table>
             </div>
         </div>
-        <form method="POST" action="{{ url_for('action_config') }}">
+        <form id="i_form" method="POST" action="{{ url_for('action_config') }}">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="inputCode">Code</label>
-                    <input type="text" id="inputCode" class="form-control" placeholder="Code" name=code required>
+                    <label for="input_code">Code</label>
+                    <input type="text" id="input_code" class="form-control input_code" placeholder="Code" name=code required>
                 </div>
                 <div class="col-md-3">
-                    <label for="inputCmd">Command</label>
-                    <select id="inputCmd" class="form-control" name=cmd required>
+                    <label for="input_cmd">Command</label>
+                    <select id="input_cmd" class="form-control input_cmd" name=cmd required>
                         {% for key in  commands %}
                         <option value="{{ key }}">{{ key }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label for="inputReason">Reason</label>
-                    <input type="text" id="inputReason" class="form-control" placeholder="Reason" name=reason required>
+                    <label for="input_reason">Reason</label>
+                    <input type="text" id="input_reason" class="form-control input_reason" placeholder="Reason" name=reason required>
                 </div>
-                <div class="col-md-3"><button class="form-control btn btn-default" type="submit">Add</button></div>
+                <div id="i_action" class="col-md-3">
+                    <button class="form-control btn btn-primary non-btn-edit" type="submit" name="create">Create</button>
+                    <button class="form-control btn btn-success submit-btn-edit hide" type="submit" name="edit" disabled>Edit</button>
+                    <button class="form-control btn btn-default cancel-btn-edit hide" type="button" name="cancel" data-target="#i_action" data-form="#i_form" disabled>Cancel</button>
+                </div>
             </div>
 
         </form>
+
+        <script type="text/javascript">
+        $( document ).ready(function() {
+            $('select.div-toggle').change(move_options).trigger('change');
+            $('button.btn-edit').click(start_edit);
+            $('button.cancel-btn-edit').click(cancel_edit);
+        });
+        </script>
 
     </div> <!-- /container -->
 {% endblock %}

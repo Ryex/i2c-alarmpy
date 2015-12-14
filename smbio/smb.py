@@ -1,4 +1,7 @@
-import smbus
+try:
+    import smbus
+except ImportError:
+    pass
 
 
 def Bus(bus):
@@ -59,8 +62,7 @@ class Data:
         if not isinstance(value, int) or value.bit_length() > self.length:
             raise ValueError(
                 "can only write ints with a bit length "
-                "smaller than {}".format(self.length)
-            )
+                "smaller than {}".format(self.length))
         self.bus.write_byte_data(self.addr, self.com, value << self.offset)
 
     def read(self):
@@ -105,8 +107,7 @@ class IO():
     def __check_pin(self, pin):
         if pin > IO.PINMAX or pin < IO.PINMIN:
             raise ValueError(
-                "pin must be between {} and {}".format(IO.PINMAX, IO.PINMIN)
-            )
+                "pin must be between {} and {}".format(IO.PINMAX, IO.PINMIN))
 
     def write_out(self, value):
         self.__check_value(value)

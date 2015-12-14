@@ -27,9 +27,16 @@
                     <td>{{ indicator["interface_id"] }}</td>
                     <td>{{ alarm_states[indicator["state"]] }}</td>
                     <td>
+                        <button class="btn btn-success btn-block btn-edit" name="edit" value="true" type="button" data-id="{{ indicator['indicator_id'] }}" data-target="#i_action"
+                            data-values="interfaceid,state"
+                            data-interfaceid="{{ indicator['interface_id'] }}"
+                            data-state="{{ indicator['state'] }}"
+                            >
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        </button>
                         <form method="POST" action="{{ url_for('indicator_config') }}">
                             <input type="hidden" name="id" value="{{ indicator['indicator_id'] }}">
-                            <button class="btn btn-primary btn-block" name="delete" value="true" type="submit">
+                            <button class="btn btn-danger btn-block" name="delete" value="true" type="submit">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             </button>
                         </form>
@@ -39,28 +46,40 @@
                 </table>
             </div>
         </div>
-        <form method="POST" action="{{ url_for('indicator_config') }}">
+        <form id="i_form" method="POST" action="{{ url_for('indicator_config') }}">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="inputInterfaceID">Interface</label>
-                    <select id="inputInterfaceID" class="form-control" name="interface_id" required>
+                    <label for="input_interfaceid">Interface</label>
+                    <select id="input_interfaceid" class="form-control input_interfaceid" name="interface_id" required>
                         {% for interface in interfaces %}
                         <option value="{{ interface["interface_id"] }}">{{ interface["interface_id"] }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label for="inputState">Alarm State</label>
-                    <select id="inputState" class="form-control" name="state" required>
+                    <label for="input_state">Alarm State</label>
+                    <select id="input_state" class="form-control input_state" name="state" required>
                         {% for key in alarm_states %}
                         <option value="{{ key }}">{{ alarm_states[key] }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-3"><button class="form-control btn btn-default" type="submit">Add</button></div>
+                <div id="i_action" class="col-md-3">
+                    <button class="form-control btn btn-primary non-btn-edit" type="submit" name="create">Create</button>
+                    <button class="form-control btn btn-success submit-btn-edit hide" type="submit" name="edit" disabled>Edit</button>
+                    <button class="form-control btn btn-default cancel-btn-edit hide" type="button" name="cancel" data-target="#i_action" data-form="#i_form" disabled>Cancel</button>
+                </div>
             </div>
 
         </form>
+
+        <script type="text/javascript">
+        $( document ).ready(function() {
+            $('select.div-toggle').change(move_options).trigger('change');
+            $('button.btn-edit').click(start_edit);
+            $('button.cancel-btn-edit').click(cancel_edit);
+        });
+        </script>
 
     </div> <!-- /container -->
 {% endblock %}

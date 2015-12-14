@@ -105,15 +105,22 @@ def users():
                 flask.flash("can not delete last user")
         else:
             username = flask.request.form['username']
-            user = utils.get_user()
-            if not user:
+            user = utils.get_user(username)
+            if (not user) or ("edit" in flask.request.form):
                 password = flask.request.form['password']
                 password_confirm = flask.request.form['password_confirm']
                 if password == password_confirm:
-                    utils.create_user(username, password)
-                    flask.flash('User Created')
-                    return flask.redirect(flask.url_for('login'))
-                error = "passwords do not match"
+                    if "edit" in flask.request.form:
+                        user_id = int(flask.request.form['edit'])
+                        utils.modify_user(user_id, username, password)
+                        flask.flash('User Edited')
+                    else:
+                        utils.create_user(username, password)
+                        flask.flash('User Created')
+                    if "setup" in flask.request.form:
+                        return flask.redirect(flask.url_for('login'))
+                else:
+                    error = "passwords do not match"
             else:
                 error = "user already exists"
 
@@ -154,15 +161,16 @@ def dashboard():
     if ('logged_in' not in flask.session) or (not flask.session['logged_in']):
         return flask.redirect(flask.url_for('login'))
     running = utils.check_pid(Config["pidfile"])
-    trunning, tutime = utils.get_last_manager_state()
+    tstate = utils.get_state("alarm_thread")
     tutime_s = ""
-    if tutime:
+    trunning = False
+    if tstate:
+        trunning, tutime = tstate
         tutime_s = time.strftime("%c", time.localtime(tutime))
 
     thread_state = {
         "running": bool(trunning),
-        "utime": tutime_s
-    }
+        "utime": tutime_s}
 
     utime = time.strftime("%c", time.localtime())
     state_text = "Not Runnning"
@@ -171,14 +179,13 @@ def dashboard():
         "armed": False,
         "disarmed": False,
         "tripped": False,
-        "falted": False,
-    }
+        "falted": False}
 
     state_data = None
 
-    state = utils.get_latest_state()
-    if state:
-        alarm_state, state_data, state_time_i = state
+    alarm_state_d = utils.get_state("alarm")
+    if alarm_state_d:
+        alarm_state, state_time_i = alarm_state_d
         if alarm_state is not None:
             utime = time.strftime("%c", time.localtime(state_time_i))
             state_text = Alarm.ALARM_STATES[alarm_state]
@@ -187,6 +194,13 @@ def dashboard():
             flags["tripped"] = alarm_state == Alarm.TRIPPED
             flags["falted"] = alarm_state == Alarm.FALT
             flags["armed"] = alarm_state == Alarm.ARMED
+
+    states = utils.get_states_not("alarm", "alarm_thread")
+    state_data = {
+        state['key']: {
+            'data': state['data'],
+            'time': time.strftime("%c", time.localtime(state['state_time']))}
+        for state in states}
 
     interfaces = utils.get_interfaces()
     return flask.render_template(
@@ -280,8 +294,7 @@ def arm():
     if 'logged_in' in flask.session and flask.session['logged_in']:
         utils.write_command({"action": {
             "command": "arm",
-            "reason": "Web Interface Arm"
-        }})
+            "reason": "Web Interface Arm"}})
         return flask.redirect(flask.url_for('dashboard'))
     return flask.abort(403)
 
@@ -291,8 +304,7 @@ def disarm():
     if 'logged_in' in flask.session and flask.session['logged_in']:
         utils.write_command({"action": {
             "command": "disarm",
-            "reason": "Web Interface Disarm"
-        }})
+            "reason": "Web Interface Disarm"}})
         return flask.redirect(flask.url_for('dashboard'))
     return flask.abort(403)
 
@@ -302,8 +314,7 @@ def alarm():
     if 'logged_in' in flask.session and flask.session['logged_in']:
         utils.write_command({"action": {
             "command": "alarm",
-            "reason": "Web Interface Alarm"
-        }})
+            "reason": "Web Interface Alarm"}})
         return flask.redirect(flask.url_for('dashboard'))
     return flask.abort(403)
 
@@ -328,8 +339,13 @@ def io_config():
             io_type = int(flask.request.form['type'])
             bus = int(flask.request.form['bus'])
             addr = int(flask.request.form['addr'], 16)
-            utils.create_io(io_type, bus, addr)
-            flask.flash('IO Created')
+            if "edit" in flask.request.form:
+                io_id = int(flask.request.form['edit'])
+                utils.modify_io(io_id, io_type, bus, addr)
+                flask.flash('IO Edited')
+            else:
+                utils.create_io(io_type, bus, addr)
+                flask.flash('IO Created')
 
     ios = utils.get_ios()
     return flask.render_template(
@@ -360,8 +376,14 @@ def interface_config():
             data = {}
             for key in datamap:
                 data[key] = flask.request.form[key]
-            utils.create_interface(interface_type, io_id, slot, data)
-            flask.flash('Interface Created')
+            if "edit" in flask.request.form:
+                interface_id = int(flask.request.form['edit'])
+                utils.modify_interface(
+                    interface_id, interface_type, io_id, slot, data)
+                flask.flash('Interface Edited')
+            else:
+                utils.create_interface(interface_type, io_id, slot, data)
+                flask.flash('Interface Created')
 
     interfaces = utils.get_interfaces()
     ios = utils.get_ios()
@@ -390,8 +412,13 @@ def action_config():
             code = flask.request.form['code']
             cmd = flask.request.form['cmd']
             reason = flask.request.form['reason']
-            utils.create_action(code, cmd, reason)
-            flask.flash('Action Created')
+            if "edit" in flask.request.form:
+                action_id = int(flask.request.form['edit'])
+                utils.modify_action(action_id, code, cmd, reason)
+                flask.flash('Action Edited')
+            else:
+                utils.create_action(code, cmd, reason)
+                flask.flash('Action Created')
 
     actions = utils.get_actions()
     return flask.render_template(
@@ -417,8 +444,13 @@ def indicator_config():
         else:
             interface_id = int(flask.request.form["interface_id"])
             state = int(flask.request.form["state"])
-            utils.create_indicator(interface_id, state)
-            flask.flash('Indicator Created')
+            if "edit" in flask.request.form:
+                indicator_id = int(flask.request.form['edit'])
+                utils.modify_indicator(indicator_id, interface_id, state)
+                flask.flash('Indicator Edited')
+            else:
+                utils.create_indicator(interface_id, state)
+                flask.flash('Indicator Created')
 
     interfaces = utils.get_interfaces()
     indicators = utils.get_indicators()

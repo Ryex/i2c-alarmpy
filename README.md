@@ -9,7 +9,7 @@ run `alarm.py` to monitor sensors and update indicators
 run `web.py` to have a web interface to configure and monitor system
 
 The system makes user of `smbus` the python interface released with lm-sensors,
-`flask` the python micro web framwork,
+`flask` the python micro web framework,
 `sqlite` for a database for storing logs and configuration,
 and `bcrypt` to keep user passwords and alarm cods secure.
 

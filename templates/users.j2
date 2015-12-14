@@ -18,9 +18,17 @@
                     <td>{{ user["user_id"] }}</td>
                     <td>{{ user["username"] }}</td>
                     <td>
+                        <button class="btn btn-success btn-block btn-edit" name="edit" value="true" type="button" data-id="{{ user['user_id'] }}" data-target="#i_action"
+                            data-values="username,state"
+                            data-username="{{ user['username'] }}"
+                            data-password=""
+                            data-passwordconfirm=""
+                            >
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        </button>
                         <form method="POST" action="{{ url_for('users') }}">
                             <input type="hidden" name="id" value="{{ user['user_id'] }}">
-                            <button class="btn btn-primary btn-block" name="delete" value="true" type="submit">
+                            <button class="btn btn-danger btn-block" name="delete" value="true" type="submit">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             </button>
                         </form>
@@ -37,13 +45,25 @@
             {{ error }}
         </div>
         {% endif %}
-        <form class="form-signin" action="{{ url_for('login') }}" method=post>
-            <label for="inputUsername" class="sr-only">Username</label>
-            <input type="text" id="inputUsername" name=username class="form-control" placeholder="Username" required autofocus>
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" type=password name=password class="form-control" placeholder="Password" required>
-            <input type=password name=password_confirm class="form-control" placeholder="Confirm Password" required>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
+        <form id="i_form" class="form-signin" action="{{ url_for('users') }}" method=post>
+            <label for="input_username" class="sr-only">Username</label>
+            <input type="text" id="input_username" name=username class="form-control input_username" placeholder="Username" required autofocus>
+            <label for="input_password" class="sr-only">Password</label>
+            <input type="password" id="input_password" type=password name=password class="form-control input_password" placeholder="Password" required>
+            <input type=password id="input_passwordconfirm" name=password_confirm class="form-control input_passwordconfirm" placeholder="Confirm Password" required>
+            <div id="i_action">
+                <button class="form-control btn btn-lg btn-primary non-btn-edit" type="submit" name="create">Create</button>
+                <button class="form-control btn btn-lg btn-success submit-btn-edit hide" type="submit" name="edit" disabled>Edit</button>
+                <button class="form-control btn btn-lg btn-default cancel-btn-edit hide" type="button" name="cancel" data-target="#i_action" data-form="#i_form" disabled>Cancel</button>
+            </div>
         </form>
+
+        <script type="text/javascript">
+        $( document ).ready(function() {
+            $('select.div-toggle').change(move_options).trigger('change');
+            $('button.btn-edit').click(start_edit);
+            $('button.cancel-btn-edit').click(cancel_edit);
+        });
+        </script>
     </div> <!-- /container -->
 {% endblock %}

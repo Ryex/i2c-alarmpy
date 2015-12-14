@@ -29,6 +29,5 @@ def write_log(message, error=False, alarm=False):
                 "error": error,
                 "alarm": alarm,
                 "message": message,
-                "time": time.time()
-            })
+                "time": time.time()})
         db.commit()

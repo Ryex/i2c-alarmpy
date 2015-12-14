@@ -20,8 +20,7 @@ class AlarmManager:
             "start": self.start_alarm,
             "stop": self.stop_alarm,
             "restart": self.restart_alarm,
-            "action": self.action_alarm
-        }
+            "action": self.action_alarm}
 
     def start_alarm(self, reason):
         self.alarm.start()
@@ -85,13 +84,15 @@ class AlarmManager:
         with closing(database.get_db()) as db:
             c = db.cursor()
             c.execute(
-                "insert into manager_state "
-                "(state, state_time) "
-                "values (:state, :time);",
+                "INSERT OR IGNORE INTO state (key) VALUES ('alarm_thread');"
+                "UPDATE state SET"
+                "data = :data,"
+                "state_time = :time"
+                "WHERE key = 'alarm_thread';",
                 {
-                    "state": int(self.alarm.is_running()),
-                    "time": time.time()
-                })
+                    "data": json.dumps(self.alarm.is_running()),
+                    "time": time.time()})
+
             db.commit()
 
 
@@ -108,15 +109,13 @@ class Alarm:
         ARMED: "Armed",
         TRIPPED: "Triped",
         ALARMED: "Alarmed",
-        FALT: "Falt"
-    }
+        FALT: "Falt"}
 
     ACTIONS = {
         "arm": None,
         "disarm": None,
         "trip": None,
-        "alarm": None
-    }
+        "alarm": None}
 
     def __init__(self):
         self.thread = None
@@ -126,8 +125,7 @@ class Alarm:
         self.interfaces = None
         self.MESSAGES = {
             "input": self.process_input,
-            "switch": self.process_switch
-        }
+            "switch": self.process_switch}
 
         self.ACTIONS["arm"] = self.arm
         self.ACTIONS["disarm"] = self.disarm
@@ -189,7 +187,13 @@ class Alarm:
     def configure(self):
         with closing(database.get_db()) as db:
             c = db.cursor()
+            self._configure_ios(c)
+            self._configure_interfaces(c)
+            self._configure_actions(c)
+            self._configure_indicators(c)
+            self._configured = True
 
+    def _configure_ios(self, c):
             c.execute("select io_id, type, bus, addr from io;")
             ios = c.fetchall()
             if ios:
@@ -201,6 +205,7 @@ class Alarm:
                     klass = smbio.IOMAP[smbio.IOTYPES[t]]
                     self.ios[io_id] = klass.create(smbio.smb.Bus(bus), addr)
 
+    def _configure_interfaces(self, c):
             c.execute(
                 "select interface_id, type, io_id, slot, data "
                 "from interface;")
@@ -215,11 +220,11 @@ class Alarm:
                             % (interface_id,))
                     data = json.loads(data_s)
                     klass = smbio.INTERFACEMAP[
-                        smbio.INTERFACETYPES[t]
-                    ]
+                        smbio.INTERFACETYPES[t]]
                     self.interfaces[interface_id] = klass(
                         interface_id, self.ios[io_id][slot], data)
 
+    def _configure_actions(self, c):
             c.execute(
                 "select action_id, code_hash, command, reason "
                 "from action;")
@@ -231,9 +236,9 @@ class Alarm:
                     self.actions[action_id] = {
                         "code_hash": code_hash,
                         "command": command,
-                        "reason": reason
-                    }
+                        "reason": reason}
 
+    def _configure_indicators(self, c):
             c.execute(
                 "select indicator_id, interface_id, state from indicator;")
             indicators = c.fetchall()
@@ -243,10 +248,7 @@ class Alarm:
                     indicator_id, interface_id, state = indicator
                     self.indicators[indicator_id] = {
                         "interface": interface_id,
-                        "state": state
-                    }
-
-        self._configured = True
+                        "state": state}
 
     def log(self, message, error=None, alarm=False):
         timestamp = time.strftime("%Z %Y-%m-%d %H:%M:%S", time.localtime())
@@ -259,11 +261,19 @@ class Alarm:
     def log_state(self, states):
         with closing(database.get_db()) as db:
             c = db.cursor()
-            c.execute(
-                "insert into state "
-                "(state, data, state_time) "
-                "values (%d, '%s', %d);"
-                % (self.state, json.dumps(states), time.time()))
+            time_now = time.time()
+            states["alarm"] = self.state
+            for state, data in states:
+                c.execute(
+                    "INSERT OR IGNORE INTO state (key) VALUES (:key);"
+                    "UPDATE state SET"
+                    "data = :data,"
+                    "state_time = :time"
+                    "WHERE key = :key;",
+                    {
+                        "key":  state,
+                        "data": json.dumps(data),
+                        "time": time_now})
             db.commit()
 
     def stop(self):

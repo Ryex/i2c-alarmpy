@@ -141,7 +141,7 @@
 
                     <td>
                         {% if state_data %}
-                        {{ state_data[interface["interface_id"]] }}
+                        {{ state_data[interface["interface_id"]]['data'] }} | {{ state_data[interface["interface_id"]]['time'] }}
                         {% else %}
                         No Data
                         {% endif %}

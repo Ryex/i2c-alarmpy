@@ -9,5 +9,6 @@
     "title": "Alarm System",
     "pidfile": "/var/run/alarmsystem.pid",
     "manager_sleep": 1,
-    "alarm_sleep": 0
+    "alarm_sleep": 0,
+    "auto_arm": false
 }
