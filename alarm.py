@@ -104,7 +104,6 @@ class AlarmManager:
             c.execute(
                 "INSERT OR IGNORE INTO state (key) VALUES ('alarm_thread');")
             c.execute(
-
                 "UPDATE state SET "
                 "data = :data, "
                 "state_time = :time "
@@ -130,7 +129,6 @@ class Alarm:
         TRIPPED: "Triped",
         ALARMED: "Alarmed",
         FAULT: "Fault"}
-
     ACTIONS = {
         "arm": None,
         "disarm": None,
