@@ -1,5 +1,7 @@
 #!/usr/bin/python
 import os
+import sys
+import signal
 import time
 import threading
 import traceback
@@ -46,8 +48,19 @@ class AlarmManager:
         message = timestamp + " " + message
         database.write_log(message, error=(error is not None))
 
+    def catch_sigint(self, sig, frame):
+        self.log("Recivecd Exit signal: exiting ")
+        self.stop_alarm()
+        self._running = False
+
+    def bind_sigint(self):
+        signal.signal(signal.SIGINT, self.catch_sigint)
+
     def main(self):
         self._running = True
+        self.bind_sigint()
+        if Config["auto_arm"]:
+            self.alarm.arm("Auto Arm")
         while self._running:
             try:
                 with closing(database.get_db()) as db:
@@ -63,6 +76,11 @@ class AlarmManager:
                 time.sleep(Config["manager_sleep"])
             except Exception as err:
                 self.log("Error in manager Main loop", err)
+            except KeyboardInterrupt:
+                self.log("Recivecd Ctl-C: exiting ")
+                self.stop_alarm()
+                self._running = False
+        self.log_state()
 
     def process_cmd(self, cmd_id, data):
         self.clear_cmd(cmd_id)
@@ -373,8 +391,12 @@ def write_pid():
         f.write(str(os.getpid()))
 
 
+def del_pid():
+    os.remove(Config["pidfile"])
+
 if __name__ == "__main__":
     database.init_db()
     a = AlarmManager()
     write_pid()
     a.main()
+    del_pid()
