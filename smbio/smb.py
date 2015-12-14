@@ -1,5 +1,6 @@
 import smbus
 
+
 def Bus(bus):
     return smbus.SMBus(bus)
 
