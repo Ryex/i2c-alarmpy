@@ -95,7 +95,8 @@ class LedBlink(Peripheral):
                 self.flip()
                 self.last = now
         else:
-            self.off()
+            if bool(self._state):
+                self.off()
         return {"ledblink": self._state}
 
 
