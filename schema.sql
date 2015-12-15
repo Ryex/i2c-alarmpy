@@ -47,6 +47,6 @@ create table if not exists indicator (
 
 create table if not exists state (
     key text unique primary key,
-    data text not null,
-    state_time integer not null
+    data text,
+    state_time integer
 );
