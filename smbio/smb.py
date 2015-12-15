@@ -67,6 +67,7 @@ class Data:
             raise ValueError(
                 "can only write ints with a bit length "
                 "smaller than {}".format(self.length))
+        print("writing", hex(self.addr), hex(self.com), hex(value << self.offset))
         self.bus.write_byte_data(self.addr, self.com, value << self.offset)
 
     def read(self):
