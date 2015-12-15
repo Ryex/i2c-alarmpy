@@ -16,13 +16,17 @@ class Led(Peripheral):
         self._state = 0
         self.io.set_mode_pin(self.pin, self.io.WRITE)
 
+    def ensure_mode(self):
+        if self.io.get_mode_pin(self.pin) != self.io.WRITE:
+            self.io.set_mode_pin(self.pin, self.io.WRITE)
+
     def on(self):
-        self.init()
+        self.ensure_mode()
         self.io.write_out_pin(self.pin, 1)
         self._state = 1
 
     def off(self):
-        self.init()
+        self.ensure_mode()
         self.io.write_out_pin(self.pin, 0)
         self._state = 0
 
@@ -58,13 +62,17 @@ class LedBlink(Peripheral):
         self._running = False
         self.io.set_mode_pin(self.pin, self.io.WRITE)
 
+    def ensure_mode(self):
+        if self.io.get_mode_pin(self.pin) != self.io.WRITE:
+            self.io.set_mode_pin(self.pin, self.io.WRITE)
+
     def on(self):
-        self.init()
+        self.ensure_mode()
         self.io.write_out_pin(self.pin, 1)
         self._state = 1
 
     def off(self):
-        self.init()
+        self.ensure_mode()
         self.io.write_out_pin(self.pin, 0)
         self._state = 0
 
@@ -105,13 +113,17 @@ class Siren(Peripheral):
         self._state = 0
         self.io.set_mode_pin(self.pin, self.io.WRITE)
 
+    def ensure_mode(self):
+        if self.io.get_mode_pin(self.pin) != self.io.WRITE:
+            self.io.set_mode_pin(self.pin, self.io.WRITE)
+
     def on(self):
-        self.init()
+        self.ensure_mode()
         self.io.write_out_pin(self.pin, 1)
         self._state = 1
 
     def off(self):
-        self.init()
+        self.ensure_mode()
         self.io.write_out_pin(self.pin, 0)
         self._state = 0
 
@@ -151,6 +163,10 @@ class Buzzer(Peripheral):
         self.buzzing = False
         self.last = 0
 
+    def ensure_mode(self):
+        if self.io.get_mode_pin(self.pin) != self.io.WRITE:
+            self.io.set_mode_pin(self.pin, self.io.WRITE)
+
     def process_messages(self, messages):
         if "buzz" in messages:
             self.buzz()
@@ -161,12 +177,12 @@ class Buzzer(Peripheral):
         self.on()
 
     def on(self):
-        self.init()
+        self.ensure_mode()
         self.io.write_out_pin(self.pin, 1)
         self._state = 1
 
     def off(self):
-        self.init()
+        self.ensure_mode()
         self.io.write_out_pin(self.pin, 0)
         self._state = 0
 

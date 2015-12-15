@@ -39,6 +39,12 @@ class Peripheral:
     def get_state(self):
         return self._state
 
+    def update_state(self, state):
+        pass
+
+    def update(self):
+        pass
+
 
 class Data:
     '''
