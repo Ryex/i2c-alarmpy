@@ -71,11 +71,8 @@ class Data:
 
         out_val = value << self.offset
         if out_val == 0:
-            try:
-                raise RuntimeError
-            except RuntimeError:
-                trace = traceback.format_exc()
-                print("writing", hex(self.addr), hex(self.com), hex(value << self.offset), trace)
+            traceback.print_stack()
+            print("writing", hex(self.addr), hex(self.com), hex(value << self.offset), trace)
         self.bus.write_byte_data(self.addr, self.com, value << self.offset)
 
     def read(self):
