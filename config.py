@@ -36,7 +36,7 @@ if "faulted_timeout" not in Config:
     Config["faulted_timeout"] = 10
 
 if "secret" not in Config:
-    Config["secret"] = None
+    Config["secret"] = "ChangeMeNow"
 
 if "title" not in Config:
     Config["title"] = "Alarm System"
