@@ -6,8 +6,7 @@ class Led(Peripheral):
 
     DIRECTION = 1
     DATAMAP = {
-        "pin": "pin"
-    }
+        "pin": "pin"}
 
     def init(self):
         if "pin" in self.data:
@@ -28,10 +27,11 @@ class Led(Peripheral):
         self._state = 0
 
     def update_state(self, state):
-        if state:
-            self.on()
-        else:
-            self.off()
+        if bool(state) != bool(self._state):
+            if state:
+                self.on()
+            else:
+                self.off()
 
     def update(self):
         return {"led": self._state}
@@ -42,8 +42,7 @@ class LedBlink(Peripheral):
     DIRECTION = 1
     DATAMAP = {
         "pin": "pin",
-        "interval": "int"
-    }
+        "interval": "int"}
 
     def init(self):
         if "pin" in self.data:
@@ -96,8 +95,7 @@ class Siren(Peripheral):
 
     DIRECTION = 1
     DATAMAP = {
-        "pin": "pin"
-    }
+        "pin": "pin"}
 
     def init(self):
         if "pin" in self.data:
@@ -121,21 +119,22 @@ class Siren(Peripheral):
         return self._state
 
     def update_state(self, state):
-        if state:
-            self.on()
-        else:
-            self.off()
+        if bool(state) != bool(self._state):
+            if state:
+                self.on()
+            else:
+                self.off()
 
     def update(self):
         return {"siren": self._state}
+
 
 class Buzzer(Peripheral):
 
     DIRECTION = 1
     DATAMAP = {
         "pin": "pin",
-        "length": "int"
-    }
+        "length": "int"}
 
     def init(self):
         if "pin" in self.data:
