@@ -55,7 +55,7 @@
                         <div class="col-md-3">
                             <label for="input_cmd">Command</label>
                             <select id="input_cmd" class="form-control input_cmd" name=cmd required>
-                                {% for key in  commands %}
+                                {% for key , value in  commands | dictsort %}
                                 <option value="{{ key }}">{{ key }}</option>
                                 {% endfor %}
                             </select>
