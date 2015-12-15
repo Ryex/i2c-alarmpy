@@ -1,7 +1,5 @@
-try:
-    import smbus
-except ImportError:
-    pass
+import smbus
+import warnings
 
 
 def Bus(bus):
@@ -70,7 +68,7 @@ class Data:
         return value >> self.offset
 
 
-class IO():
+class IO:
     '''Define an interface to an 8 bit IO'''
     READ = 1
     WRITE = 0
@@ -86,6 +84,10 @@ class IO():
         self.olat = Data(bus, self.addr, olat)
         self.gpio = Data(bus, self.addr, gpio)
         self.pullup = Data(bus, self.addr, pullup)
+        self.iodir_val = self.get_mode()
+        self.gpio_val = self.read_in()
+        self.olat_val = self.read_out()
+        self.pullup_val = self.get_pullup()
 
     def __check_value(self, value, pin=False):
         if not isinstance(value, int):
@@ -112,11 +114,15 @@ class IO():
     def write_out(self, value):
         self.__check_value(value)
         self.olat.write(value)
+        self.olat_val = value
 
     def write_out_pin(self, pin, value):
         self.__check_pin(pin)
         self.__check_value(value, True)
         cur = self.read_out()
+        if cur != self.olat_val:
+            self.warn(cur, self.olat_val, 'olat')
+            cur = self.olat_val
         new = cur ^ ((-value ^ cur) & (1 << pin))
         self.write_out(new)
 
@@ -139,11 +145,15 @@ class IO():
     def set_mode(self, mode):
         self.__check_value(mode)
         self.iodir.write(mode)
+        self.iodir_val = mode
 
     def set_mode_pin(self, pin, mode):
         self.__check_pin(pin)
         self.__check_mode(mode)
         cur = self.get_mode()
+        if cur != self.iodir_val:
+            self.warn(cur, self.iodir_val, 'iodir')
+            cur = self.iodir_val
         new = cur ^ ((-mode ^ cur) & (1 << pin))
         self.set_mode(new)
 
@@ -158,11 +168,15 @@ class IO():
     def set_pullup(self, mode):
         self.__check_value(mode)
         self.pullup.write(mode)
+        self.pullup_val = mode
 
     def set_pullup_pin(self, pin, mode):
         self.__check_pin(pin)
         self.__check_mode(mode)
         cur = self.get_pullup()
+        if cur != self.pullup_val:
+            self.warn(cur, self.pullup_val, 'pullup')
+            cur = self.pullup_val
         new = cur ^ ((-mode ^ cur) & (1 << pin))
         self.set_pullup(new)
 
@@ -173,6 +187,18 @@ class IO():
         self.__check_pin(pin)
         cur = self.get_pullup()
         return (cur >> pin) & 1
+
+    def warn(self, got, expected, where):
+            warnings.warn(
+                "Unexpected state: "
+                "got {} expected {} "
+                "in {} bus: {} addr: {}".format(
+                    hex(got),
+                    hex(expected),
+                    where,
+                    int(self.bus),
+                    hex(self.addr)),
+                RuntimeWarning)
 
 
 class IOGroup:

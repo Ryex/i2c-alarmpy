@@ -5,8 +5,7 @@ class Switch(Peripheral):
 
     DIRECTION = -1
     DATAMAP = {
-        "pin": "pin"
-    }
+        "pin": "pin"}
 
     def init(self):
         if "pin" in self.data:

@@ -180,10 +180,11 @@ class Buzzer(Peripheral):
             self.off()
 
     def update_state(self, state):
-        if state:
-            self.on()
-        else:
-            self.off()
+        if bool(state) != bool(self._state):
+            if state:
+                self.on()
+            else:
+                self.off()
 
     def update(self):
         if self.buzzing:

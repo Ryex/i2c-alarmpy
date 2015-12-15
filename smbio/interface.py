@@ -9,8 +9,7 @@ class Keypad4x4Matrix(Peripheral):
     DATAMAP = {
         "upsidedown": "bool",
         "repeat": "int",
-        "timeout": "int"
-    }
+        "timeout": "int"}
 
     MATRIX = [['1', '2', '3', 'A'],
               ['4', '5', '6', 'B'],
@@ -22,8 +21,7 @@ class Keypad4x4Matrix(Peripheral):
         0b0111: 0,
         0b1011: 1,
         0b1101: 2,
-        0b1110: 3
-    }
+        0b1110: 3}
 
     CODE_RE = re.compile("^\*(.+?)#$")
 

@@ -1,7 +1,4 @@
-try:
-    import smbus
-except ImportError:
-    pass
+import smbus
 from .smb import IO, IOGroup
 
 
