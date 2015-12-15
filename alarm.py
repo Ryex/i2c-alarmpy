@@ -104,9 +104,9 @@ class AlarmManager:
                 "INSERT OR IGNORE INTO state (key) VALUES ('alarm_thread');")
             c.execute(
 
-                "UPDATE state SET"
-                "data = :data,"
-                "state_time = :time"
+                "UPDATE state SET "
+                "data = :data, "
+                "state_time = :time "
                 "WHERE key = 'alarm_thread';",
                 {
                     "data": json.dumps(self.alarm.is_running()),
@@ -287,9 +287,9 @@ class Alarm:
                     "INSERT OR IGNORE INTO state (key) VALUES (:key);",
                     {"key":  state})
                 c.execute(
-                    "UPDATE state SET"
-                    "data = :data,"
-                    "state_time = :time"
+                    "UPDATE state SET "
+                    "data = :data, "
+                    "state_time = :time "
                     "WHERE key = :key;",
                     {
                         "key":  state,
