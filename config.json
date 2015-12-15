@@ -10,5 +10,6 @@
     "pidfile": "/var/run/alarmsystem.pid",
     "manager_sleep": 1,
     "alarm_sleep": 0,
-    "auto_arm": false
+    "auto_arm": false,
+    "arm_delay": 30,
 }

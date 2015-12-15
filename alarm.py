@@ -119,16 +119,21 @@ class Alarm:
 
     DISARMED = 0
     ARMED = 1
-    TRIPPED = 2
-    ALARMED = 3
-    FAULT = 4
+    ARMDELAY = 2
+    TRIPPED = 3
+    ALARMED = 4
+    FAULT = 5
 
     ALARM_STATES = {
         DISARMED: "Disarmed",
         ARMED: "Armed",
+        ARMDELAY: "Arm-delay",
         TRIPPED: "Triped",
         ALARMED: "Alarmed",
         FAULT: "Fault"}
+
+    NOOP_STATES = [ARMDELAY, FAULT]
+
     ACTIONS = {
         "arm": None,
         "disarm": None,
@@ -164,15 +169,21 @@ class Alarm:
         return False
 
     def arm(self, reason):
+        if self.state in Alarm.NOOP_STATES:
+            return
         if self.state == self.DISARMED:
-            self.state = self.ARMED
+            self.state = self.ARMDELAY
         self.log("ARM " + reason)
 
     def disarm(self, reason):
+        if self.state in Alarm.NOOP_STATES:
+            return
         self.state = self.DISARMED
         self.log("DISARM " + reason)
 
     def trip(self, reason):
+        if self.state in Alarm.NOOP_STATES:
+            return
         if self.state == Alarm.ARMED:
             self.state = Alarm.TRIPPED
             self.last = time.time()
@@ -201,6 +212,11 @@ class Alarm:
         now = time.time()
         if now - self.last > Config["faulted_timeout"]:
             self.state = Alarm.DISARMED
+
+    def update_armdelay(self):
+        now = time.time()
+        if now - self.last > Config["arm_delay"]:
+            self.state = Alarm.ARMED
 
     def configure(self):
         with closing(database.get_db()) as db:
@@ -335,7 +351,9 @@ class Alarm:
         self._running = False
 
     def update(self):
-        if self.state == Alarm.TRIPPED:
+        if self.state == Alarm.ARMDELAY:
+            self.update_armdelay()
+        elif self.state == Alarm.TRIPPED:
             self.update_tripped()
         elif self.state == Alarm.FAULT:
             self.update_faulted()

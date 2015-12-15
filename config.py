@@ -52,3 +52,6 @@ if "alarm_sleep" not in Config:
 
 if "auto_arm" not in Config:
     Config["auto_arm"] = False
+
+if "arm_delay" not in Config:
+    Config["arm_delay"] = 30
