@@ -10,16 +10,13 @@
         </div>
         {% endif %}
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">IO Interfaces</h3>
-            </div>
             <div class="panel-body">
                 <table class="table">
                     <tr>
                         <th>ID</th>
                         <th>Action</th>
                         <th>Reason</th>
-                        <th>Delete</th>
+                        <th>Edit / Delete</th>
                     </tr>
                 {% for action in actions %}
                 <tr>
@@ -47,32 +44,36 @@
                 </table>
             </div>
         </div>
-        <form id="i_form" method="POST" action="{{ url_for('action_config') }}">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="input_code">Code</label>
-                    <input type="text" id="input_code" class="form-control input_code" placeholder="Code" name=code required>
-                </div>
-                <div class="col-md-3">
-                    <label for="input_cmd">Command</label>
-                    <select id="input_cmd" class="form-control input_cmd" name=cmd required>
-                        {% for key in  commands %}
-                        <option value="{{ key }}">{{ key }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label for="input_reason">Reason</label>
-                    <input type="text" id="input_reason" class="form-control input_reason" placeholder="Reason" name=reason required>
-                </div>
-                <div id="i_action" class="col-md-3">
-                    <button class="form-control btn btn-primary non-btn-edit" type="submit" name="create">Create</button>
-                    <button class="form-control btn btn-success submit-btn-edit hide" type="submit" name="edit" disabled>Edit</button>
-                    <button class="form-control btn btn-default cancel-btn-edit hide" type="button" name="cancel" data-target="#i_action" data-form="#i_form" disabled>Cancel</button>
-                </div>
-            </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form id="i_form" method="POST" action="{{ url_for('action_config') }}">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="input_code">Code</label>
+                            <input type="text" id="input_code" class="form-control input_code" placeholder="Code" name=code required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="input_cmd">Command</label>
+                            <select id="input_cmd" class="form-control input_cmd" name=cmd required>
+                                {% for key in  commands %}
+                                <option value="{{ key }}">{{ key }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="input_reason">Reason</label>
+                            <input type="text" id="input_reason" class="form-control input_reason" placeholder="Reason" name=reason required>
+                        </div>
+                        <div id="i_action" class="col-md-3">
+                            <button class="form-control btn btn-primary non-btn-edit" type="submit" name="create">Create</button>
+                            <button class="form-control btn btn-success submit-btn-edit hide" type="submit" name="edit" disabled>Edit</button>
+                            <button class="form-control btn btn-default cancel-btn-edit hide" type="button" name="cancel" data-target="#i_action" data-form="#i_form" disabled>Cancel</button>
+                        </div>
+                    </div>
 
-        </form>
+                </form>
+            </div>
+        </div>
 
         <script type="text/javascript">
         $( document ).ready(function() {

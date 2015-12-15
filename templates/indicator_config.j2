@@ -19,7 +19,7 @@
                         <th>ID</th>
                         <th>Interface</th>
                         <th>State</th>
-                        <th>Delete</th>
+                        <th>Edit / Delete</th>
                     </tr>
                 {% for indicator in indicators %}
                 <tr>
@@ -46,32 +46,37 @@
                 </table>
             </div>
         </div>
-        <form id="i_form" method="POST" action="{{ url_for('indicator_config') }}">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="input_interfaceid">Interface</label>
-                    <select id="input_interfaceid" class="form-control input_interfaceid" name="interface_id" required>
-                        {% for interface in interfaces %}
-                        <option value="{{ interface["interface_id"] }}">{{ interface["interface_id"] }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label for="input_state">Alarm State</label>
-                    <select id="input_state" class="form-control input_state" name="state" required>
-                        {% for key in alarm_states %}
-                        <option value="{{ key }}">{{ alarm_states[key] }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div id="i_action" class="col-md-3">
-                    <button class="form-control btn btn-primary non-btn-edit" type="submit" name="create">Create</button>
-                    <button class="form-control btn btn-success submit-btn-edit hide" type="submit" name="edit" disabled>Edit</button>
-                    <button class="form-control btn btn-default cancel-btn-edit hide" type="button" name="cancel" data-target="#i_action" data-form="#i_form" disabled>Cancel</button>
-                </div>
-            </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form id="i_form" method="POST" action="{{ url_for('indicator_config') }}">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="input_interfaceid">Interface</label>
+                            <select id="input_interfaceid" class="form-control input_interfaceid" name="interface_id" required>
+                                {% for interface in interfaces %}
+                                <option value="{{ interface["interface_id"] }}">{{ interface["interface_id"] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="input_state">Alarm State</label>
+                            <select id="input_state" class="form-control input_state" name="state" required>
+                                {% for key in alarm_states %}
+                                <option value="{{ key }}">{{ alarm_states[key] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div id="i_action" class="col-md-3">
+                            <button class="form-control btn btn-primary non-btn-edit" type="submit" name="create">Create</button>
+                            <button class="form-control btn btn-success submit-btn-edit hide" type="submit" name="edit" disabled>Edit</button>
+                            <button class="form-control btn btn-default cancel-btn-edit hide" type="button" name="cancel" data-target="#i_action" data-form="#i_form" disabled>Cancel</button>
+                        </div>
+                    </div>
 
-        </form>
+                </form>
+            </div>
+        </div>
+
 
         <script type="text/javascript">
         $( document ).ready(function() {

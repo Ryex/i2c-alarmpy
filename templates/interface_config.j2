@@ -21,6 +21,7 @@
                         <th>IO</th>
                         <th>Slot</th>
                         <th>Data</th>
+                        <th>Edit / Delete</th>
                     </tr>
                 {% for interface in interfaces %}
                 <tr>
@@ -101,38 +102,41 @@
         </div>
 
 
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form method="POST" id="i_form" action="{{ url_for('interface_config') }}" >
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="input_type">Type</label>
+                            <select id="input_type" class="form-control div-toggle input_type" name=type data-target="#i_type_options_in" data-bin="#i_type_option_out" required>
+                                {% for key in  smbio.INTERFACETYPES %}
+                                <option value="{{ key }}" data-show=".i_type_options_{{ key }}">{{ smbio.INTERFACETYPES[key] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="input_io">IO</label>
+                            <select id="input_io" class="form-control div-toggle input_ioid" name=io_id data-target="#i_slot_options_in" data-bin="#i_slot_option_out" required>
+                                {% for io in  ios %}
+                                <option value="{{ io['io_id'] }}" data-show=".i_slot_options_{{ io['type'] }}" >{{ io['io_id'] }}</option>
+                                {% endfor %}
+                            </select>
+                            <div id="i_slot_options_in">
 
-        <form method="POST" id="i_form" action="{{ url_for('interface_config') }}" >
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="input_type">Type</label>
-                    <select id="input_type" class="form-control div-toggle input_type" name=type data-target="#i_type_options_in" data-bin="#i_type_option_out" required>
-                        {% for key in  smbio.INTERFACETYPES %}
-                        <option value="{{ key }}" data-show=".i_type_options_{{ key }}">{{ smbio.INTERFACETYPES[key] }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label for="input_io">IO</label>
-                    <select id="input_io" class="form-control div-toggle input_ioid" name=io_id data-target="#i_slot_options_in" data-bin="#i_slot_option_out" required>
-                        {% for io in  ios %}
-                        <option value="{{ io['io_id'] }}" data-show=".i_slot_options_{{ io['type'] }}" >{{ io['io_id'] }}</option>
-                        {% endfor %}
-                    </select>
-                    <div id="i_slot_options_in">
+                            </div>
+                        </div>
+                        <div id="i_type_options_in" class="col-md-3">
 
+                        </div>
+                        <div id="i_action" class="col-md-3">
+                            <button class="form-control btn btn-primary non-btn-edit" type="submit" name="create">Create</button>
+                            <button class="form-control btn btn-success submit-btn-edit hide" type="submit" name="edit" disabled>Edit</button>
+                            <button class="form-control btn btn-default cancel-btn-edit hide" type="button" name="cancel" data-target="#i_action" data-form="#i_form" disabled>Cancel</button>
+                        </div>
                     </div>
-                </div>
-                <div id="i_type_options_in" class="col-md-3">
-
-                </div>
-                <div id="i_action" class="col-md-3">
-                    <button class="form-control btn btn-primary non-btn-edit" type="submit" name="create">Create</button>
-                    <button class="form-control btn btn-success submit-btn-edit hide" type="submit" name="edit" disabled>Edit</button>
-                    <button class="form-control btn btn-default cancel-btn-edit hide" type="button" name="cancel" data-target="#i_action" data-form="#i_form" disabled>Cancel</button>
-                </div>
+                </form>
             </div>
-        </form>
+        </div>
 
         <script type="text/javascript">
         $( document ).ready(function() {
