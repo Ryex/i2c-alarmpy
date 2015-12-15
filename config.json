@@ -4,7 +4,7 @@
     "port": 65432,
     "debug": false,
     "tripped_timeout": 30,
-    "falted_timeout": 10,
+    "faulted_timeout": 10,
     "secret": "ChangeMeNow",
     "title": "Alarm System",
     "pidfile": "/var/run/alarmsystem.pid",

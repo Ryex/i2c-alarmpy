@@ -122,14 +122,14 @@ class Alarm:
     ARMED = 1
     TRIPPED = 2
     ALARMED = 3
-    FALT = 4
+    FAULT = 4
 
     ALARM_STATES = {
         DISARMED: "Disarmed",
         ARMED: "Armed",
         TRIPPED: "Triped",
         ALARMED: "Alarmed",
-        FALT: "Falt"}
+        FAULT: "Fault"}
 
     ACTIONS = {
         "arm": None,
@@ -180,8 +180,8 @@ class Alarm:
             self.last = time.time()
             self.log("TRIPPED " + reason)
         elif self.state == Alarm.DISARMED:
-            self.state = Alarm.FALT
-            self.log("FALTED " + reason)
+            self.state = Alarm.FAULT
+            self.log("FAULTED " + reason)
             self.last = time.time()
 
     def alarm(self, reason):
@@ -199,9 +199,9 @@ class Alarm:
         if now - self.last > Config["tripped_timeout"]:
             self.alarm("Tripped timeout")
 
-    def update_falted(self):
+    def update_faulted(self):
         now = time.time()
-        if now - self.last > Config["falted_timeout"]:
+        if now - self.last > Config["faulted_timeout"]:
             self.state = Alarm.DISARMED
 
     def configure(self):
@@ -339,8 +339,8 @@ class Alarm:
     def update(self):
         if self.state == Alarm.TRIPPED:
             self.update_tripped()
-        elif self.state == Alarm.FALT:
-            self.update_falted()
+        elif self.state == Alarm.FAULT:
+            self.update_faulted()
         self.update_state()
         states = {}
         for key in self.interfaces:
