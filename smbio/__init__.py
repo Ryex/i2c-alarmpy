@@ -14,7 +14,9 @@ INTERFACETYPES = {
     0: "Led",
     1: "LedBlink",
     2: "Switch",
-    3: "Keypad4x4Matrix"}
+    3: "Keypad4x4Matrix",
+    4: "Buzzer",
+    5: "Siren"}
 
 IOMAP = {
     "MCP23008": ioexpander.MCP23008,
@@ -23,10 +25,10 @@ IOMAP = {
 INTERFACEMAP = {
     "Led": indicator.Led,
     "LedBlink": indicator.LedBlink,
-    "Buzzer": indicator.Buzzer,
-    "Siren": indicator.Siren,
     "Switch": detector.Switch,
-    "Keypad4x4Matrix": interface.Keypad4x4Matrix}
+    "Keypad4x4Matrix": interface.Keypad4x4Matrix,
+    "Buzzer": indicator.Buzzer,
+    "Siren": indicator.Siren}
 
 INTERFACEDATAMAP = {
     iface_type: INTERFACEMAP[INTERFACETYPES[iface_type]].DATAMAP

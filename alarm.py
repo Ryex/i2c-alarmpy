@@ -59,6 +59,7 @@ class AlarmManager:
         self._running = True
         self.bind_sigint()
         if Config["auto_arm"]:
+            self.start_alarm("Auto Arm")
             self.alarm.arm("Auto Arm")
         while self._running:
             try:
@@ -282,7 +283,7 @@ class Alarm:
             c = db.cursor()
             time_now = time.time()
             states["alarm"] = self.state
-            for state, data in states:
+            for state, data in states.items():
                 c.execute(
                     "INSERT OR IGNORE INTO state (key) VALUES (:key);",
                     {"key":  state})
