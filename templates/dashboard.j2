@@ -26,10 +26,10 @@
                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                 A detector has tripped, but an alarm has not yet been triggered.
             </div>
-            {% elif flags["falted"] %}
+            {% elif flags["faulted"] %}
             <div class="alert alert-warning" role="alert">
                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                Your system is falted and can not be armed.
+                Your system is faulted and can not be armed.
             </div>
             {% elif flags["disarmed"] %}
             <div class="alert alert-info" role="alert">

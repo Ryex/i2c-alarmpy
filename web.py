@@ -179,7 +179,7 @@ def dashboard():
         "armed": False,
         "disarmed": False,
         "tripped": False,
-        "falted": False}
+        "faulted": False}
 
     state_data = None
 
@@ -192,7 +192,7 @@ def dashboard():
             flags["alarm"] = alarm_state == Alarm.ALARMED
             flags["disarmed"] = alarm_state == Alarm.DISARMED
             flags["tripped"] = alarm_state == Alarm.TRIPPED
-            flags["falted"] = alarm_state == Alarm.FALT
+            flags["faulted"] = alarm_state == Alarm.FAULT
             flags["armed"] = alarm_state == Alarm.ARMED
 
     states = utils.get_states_not("alarm", "alarm_thread")
