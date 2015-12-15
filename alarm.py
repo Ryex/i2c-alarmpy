@@ -158,6 +158,7 @@ class Alarm:
         self.state = 0
         self.last = time.time()
 
+        self.buses = {}
         self.ios = {}
         self.interfaces = {}
         self.indicators = {}
@@ -236,8 +237,10 @@ class Alarm:
                     io_id, t, bus, addr, = io
                     if t not in smbio.IOTYPES:
                         raise ValueError("invaid io type for io %s" % (io_id,))
+                    if bus not in self.buses:
+                        self.buses[bus] = smbio.smb.Bus(bus)
                     klass = smbio.IOMAP[smbio.IOTYPES[t]]
-                    self.ios[io_id] = klass.create(smbio.smb.Bus(bus), addr)
+                    self.ios[io_id] = klass.create(self.buses[bus], addr)
 
     def _configure_interfaces(self, c):
             c.execute(
