@@ -49,7 +49,7 @@ class AlarmManager:
 
     def catch_sigint(self, sig, frame):
         self.log("Recivecd Exit signal: exiting ")
-        self.stop_alarm()
+        self.stop_alarm("Recivecd Exit signal")
         self._running = False
 
     def bind_sigint(self):
@@ -77,7 +77,7 @@ class AlarmManager:
                 self.log("Error in manager Main loop", err)
             except KeyboardInterrupt:
                 self.log("Recivecd Ctl-C: exiting ")
-                self.stop_alarm()
+                self.stop_alarm("Recivecd Ctl-C")
                 self._running = False
         self.log_state()
 
@@ -101,7 +101,9 @@ class AlarmManager:
         with closing(database.get_db()) as db:
             c = db.cursor()
             c.execute(
-                "INSERT OR IGNORE INTO state (key) VALUES ('alarm_thread');"
+                "INSERT OR IGNORE INTO state (key) VALUES ('alarm_thread');")
+            c.execute(
+
                 "UPDATE state SET"
                 "data = :data,"
                 "state_time = :time"
@@ -282,7 +284,9 @@ class Alarm:
             states["alarm"] = self.state
             for state, data in states:
                 c.execute(
-                    "INSERT OR IGNORE INTO state (key) VALUES (:key);"
+                    "INSERT OR IGNORE INTO state (key) VALUES (:key);",
+                    {"key":  state})
+                c.execute(
                     "UPDATE state SET"
                     "data = :data,"
                     "state_time = :time"
