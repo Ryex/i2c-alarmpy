@@ -128,7 +128,7 @@ class Alarm:
         DISARMED: "Disarmed",
         ARMED: "Armed",
         ARMDELAY: "Arm-delay",
-        TRIPPED: "Triped",
+        TRIPPED: "Tripped",
         ALARMED: "Alarmed",
         FAULT: "Fault"}
 
