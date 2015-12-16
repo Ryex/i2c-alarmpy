@@ -96,6 +96,11 @@ class IO:
         self.olat_val = self.read_out()
         self.pullup_val = self.get_pullup()
 
+    def reset(self):
+        self.iodor.write(0xff)
+        self.pullup.write(0x00)
+        self.olat.write(0x00)
+
     def __check_value(self, value, pin=False):
         if not isinstance(value, int):
             raise ValueError("value must be an int: {}".format(hex(value)))
@@ -224,3 +229,7 @@ class IOGroup:
 
     def __getitem__(self, key):
         return self.ios[key]
+
+    def reset(self):
+        for io in self.ios:
+            io.reset()

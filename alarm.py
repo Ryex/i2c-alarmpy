@@ -320,6 +320,9 @@ class Alarm:
             if self.thread is not None:
                 self._running = False
                 self.thread.join()
+            if self.ios is not None:
+                for io in self.ios.values():
+                    io.reset()
             del self.thread
             del self.ios
             del self.interfaces
