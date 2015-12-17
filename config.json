@@ -11,5 +11,6 @@
     "manager_sleep": 1,
     "alarm_sleep": 0,
     "auto_arm": false,
-    "arm_delay": 30
+    "arm_delay": 30,
+    "auto_start": true
 }

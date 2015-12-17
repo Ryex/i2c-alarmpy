@@ -47,20 +47,27 @@ class AlarmManager:
         message = timestamp + " " + message
         database.write_log(message, error=(error is not None))
 
-    def catch_sigint(self, sig, frame):
+    def catch_sigexit(self, sig, frame):
         self.log("Recivecd Exit signal: exiting ")
-        self.stop_alarm("Recivecd Exit signal")
+        self.restart_alarm("Recived Exit signal")
+
+    def catch_sigreload(self, sig, frame):
+        self.log("Recivecd Reload signal: restarting ")
+        self.stop_alarm("Recived Reload signal")
         self._running = False
 
-    def bind_sigint(self):
-        signal.signal(signal.SIGINT, self.catch_sigint)
+    def bind_sig(self):
+        signal.signal(signal.SIGINT, self.catch_sigexit)
+        signal.signal(signal.SIGTERM, self.catch_sigexit)
+        signal.signal(signal.SIGHUP, self.catch_sigreload)
 
     def main(self):
         self._running = True
-        self.bind_sigint()
-        if Config["auto_arm"]:
-            self.start_alarm("Auto Arm")
-            self.alarm.arm("Auto Arm")
+        self.bind_sig()
+        if Config["auto_start"]:
+            self.start_alarm("Auto Start")
+            if Config["auto_arm"]:
+                self.alarm.arm("Auto Arm")
         while self._running:
             try:
                 with closing(database.get_db()) as db:
