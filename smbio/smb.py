@@ -97,7 +97,7 @@ class IO:
         self.pullup_val = self.get_pullup()
 
     def reset(self):
-        self.iodor.write(0xff)
+        self.iodir.write(0xff)
         self.pullup.write(0x00)
         self.olat.write(0x00)
 
