@@ -50,11 +50,11 @@ class AlarmManager:
     def catch_sigexit(self, sig, frame):
         self.log("Recivecd Exit signal: exiting ")
         self.restart_alarm("Recived Exit signal")
+        self._running = False
 
     def catch_sigreload(self, sig, frame):
         self.log("Recivecd Reload signal: restarting ")
         self.stop_alarm("Recived Reload signal")
-        self._running = False
 
     def bind_sig(self):
         signal.signal(signal.SIGINT, self.catch_sigexit)
