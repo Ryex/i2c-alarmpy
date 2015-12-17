@@ -52,15 +52,18 @@ class Keypad4x4Matrix(Peripheral):
         self.matrix = Keypad4x4Matrix.MATRIX
         self.__check_matrix(self.matrix)
 
-        self.io.set_mode(0xF0)  # upper 4 bits are inputs
-        self.io.set_pullup(0xF0)  # enable upper 4 bits pullups
+        self.ensure_mode()
 
         self.last_t = time.time()
         self.last_s = ""
         self.in_string = ""
 
+    def ensure_mode(self):
+        self.io.set_mode(0xF0)  # upper 4 bits are inputs
+        self.io.set_pullup(0xF0)  # enable upper 4 bits pullups
+
     def read(self):
-        self.init()
+        self.ensure_mode()
         for col in range(0, 4):
             time.sleep(0.01)
             self.io.write_out(self.KEYCOL[col])  # write 0 to lowest four bits
