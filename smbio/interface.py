@@ -104,6 +104,7 @@ class Keypad4x4Matrix(Peripheral):
     def get_code(self, code):
         match = self.CODE_RE.match(code)
         if match:
+            self.in_string = ""
             return match.group(1)
         return None
 
