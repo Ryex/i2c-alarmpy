@@ -75,8 +75,6 @@ class Keypad4x4Matrix(Peripheral):
 
     def update_input(self):
         s = self.read()
-        if s:
-            print("INPUT:", s)
         now = time.time()
         if s:
             flag = False
@@ -92,6 +90,7 @@ class Keypad4x4Matrix(Peripheral):
                 self.last_s = s
                 self.last_t = now
                 self.in_string += s
+                print("INPUT:", s, self.in_string)
                 self.message("buzz")
         else:
             if now - self.last_t > self.timeout:
@@ -102,7 +101,7 @@ class Keypad4x4Matrix(Peripheral):
     def get_code(self, code):
         match = self.CODE_RE.match(code)
         if match:
-            return match.group(0)
+            return match.group(1)
         return None
 
     def update(self):
