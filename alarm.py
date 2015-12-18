@@ -164,6 +164,7 @@ class Alarm:
 
         self.state = 0
         self.last = time.time()
+        self.armtime = 0
 
         self.buses = {}
         self.ios = {}
@@ -181,6 +182,7 @@ class Alarm:
             return
         if self.state == self.DISARMED:
             self.state = self.ARMDELAY
+            self.armtime = time.time()
         self.log("ARM " + reason)
 
     def disarm(self, reason):
@@ -223,7 +225,7 @@ class Alarm:
 
     def update_armdelay(self):
         now = time.time()
-        if now - self.last > Config["arm_delay"]:
+        if now - self.armtime > Config["arm_delay"]:
             self.state = Alarm.ARMED
 
     def configure(self):
