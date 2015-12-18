@@ -6,10 +6,12 @@ from .smb import Peripheral
 class Keypad4x4Matrix(Peripheral):
 
     DIRECTION = -1
-    DATAMAP = {
-        "upsidedown": "bool",
-        "repeat": "int",
-        "timeout": "int"}
+
+    DATAMAP = Peripheral.datamap()
+    DATAMAP["upsidedown"] = "bool"
+    DATAMAP["repeat"] = "int"
+    DATAMAP["timeout"] = "int"
+    DATAMAP["beep"] = "bool"
 
     MATRIX = [['1', '2', '3', 'A'],
               ['4', '5', '6', 'B'],
@@ -94,7 +96,7 @@ class Keypad4x4Matrix(Peripheral):
                 self.last_t = now
                 self.in_string += s
                 print("INPUT:", s, self.in_string)
-                self.message("buzz")
+                self.message("beep")
         else:
             if now - self.last_t > self.timeout:
                 self.in_string = ""

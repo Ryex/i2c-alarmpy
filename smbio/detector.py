@@ -4,8 +4,8 @@ from .smb import Peripheral
 class Switch(Peripheral):
 
     DIRECTION = -1
-    DATAMAP = {
-        "pin": "pin"}
+    DATAMAP = Peripheral.datamap()
+    DATAMAP["pin"] = "pin"
 
     def init(self):
         if "pin" in self.data:

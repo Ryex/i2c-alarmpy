@@ -83,6 +83,8 @@
                         <option value="0">False</option>
                         <option value="1">True</option>
                     </select>
+                    {% if itype_data == 'str' %}
+                    <input type="text" class="form-control input_{{ dkey }}" placeholder="{{ dkey }}" name="{{ dkey }}" required>
                     {% endif %}
                 {% endfor %}
             </div>

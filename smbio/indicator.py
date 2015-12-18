@@ -5,8 +5,9 @@ from .smb import Peripheral
 class Led(Peripheral):
 
     DIRECTION = 1
-    DATAMAP = {
-        "pin": "pin"}
+
+    DATAMAP = Peripheral.datamap()
+    DATAMAP["pin"] = "pin"
 
     def init(self):
         if "pin" in self.data:
@@ -44,9 +45,9 @@ class Led(Peripheral):
 class LedBlink(Peripheral):
 
     DIRECTION = 1
-    DATAMAP = {
-        "pin": "pin",
-        "interval": "int"}
+    DATAMAP = Peripheral.datamap()
+    DATAMAP["pin"] = "pin"
+    DATAMAP["interval"] = "int"
 
     def init(self):
         if "pin" in self.data:
@@ -103,8 +104,8 @@ class LedBlink(Peripheral):
 class Siren(Peripheral):
 
     DIRECTION = 1
-    DATAMAP = {
-        "pin": "pin"}
+    DATAMAP = Peripheral.datamap()
+    DATAMAP["pin"] = "pin"
 
     def init(self):
         if "pin" in self.data:
@@ -145,9 +146,9 @@ class Siren(Peripheral):
 class Buzzer(Peripheral):
 
     DIRECTION = 1
-    DATAMAP = {
-        "pin": "pin",
-        "length": "int"}
+    DATAMAP = Peripheral.datamap()
+    DATAMAP["pin"] = "pin"
+    DATAMAP["length"] = "int"
 
     def init(self):
         if "pin" in self.data:
@@ -169,7 +170,7 @@ class Buzzer(Peripheral):
             self.io.set_mode_pin(self.pin, self.io.WRITE)
 
     def process_messages(self, messages):
-        if "buzz" in messages:
+        if "beep" in messages:
             self.buzz()
 
     def buzz(self):

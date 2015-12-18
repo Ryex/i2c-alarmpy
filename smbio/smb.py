@@ -1,6 +1,6 @@
 import smbus
 import warnings
-import traceback
+import copy
 
 
 def Bus(bus):
@@ -11,10 +11,20 @@ class Peripheral:
     '''Create a SMB Peripheral interface'''
 
     DIRECTION = 0
+    DATAMAP = {
+        "desc": "str"}
+
+    @classmethod
+    def datamap(cls):
+        return copy.copy(Peripheral.DATAMAP)
 
     def __init__(self, pid, io, data=None):
         if not isinstance(io, IO):
             raise ValueError("io must be an IO instace")
+        if "desc" in data:
+            self.desc = data["desc"]
+        else:
+            self.desc = "Interface {}".format(pid)
         self.io = io
         self.pid = pid
         self.data = data
