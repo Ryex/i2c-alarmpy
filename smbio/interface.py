@@ -95,7 +95,7 @@ class Keypad4x4Matrix(Peripheral):
                 self.last_s = s
                 self.last_t = now
                 self.in_string += s
-                print("INPUT:", s, self.in_string)
+                print("INPUT:", s, self.in_string, flush=True)
                 self.message("beep")
         else:
             if now - self.last_t > self.timeout:
