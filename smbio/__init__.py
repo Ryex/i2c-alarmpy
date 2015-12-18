@@ -16,7 +16,8 @@ INTERFACETYPES = {
     2: "Switch",
     3: "Keypad4x4Matrix",
     4: "Buzzer",
-    5: "Siren"}
+    5: "BuzzerRepeat",
+    6: "Siren"}
 
 IOMAP = {
     "MCP23008": ioexpander.MCP23008,
@@ -28,6 +29,7 @@ INTERFACEMAP = {
     "Switch": detector.Switch,
     "Keypad4x4Matrix": interface.Keypad4x4Matrix,
     "Buzzer": indicator.Buzzer,
+    "BuzzerRepeat": indicator.BuzzerRepeat,
     "Siren": indicator.Siren}
 
 INTERFACEDATAMAP = {
