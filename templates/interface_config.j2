@@ -62,16 +62,16 @@
                 {% for dkey, itype_data in smbio.INTERFACEDATAMAP[tkey]|dictsort %}
                     <label for="input_{{ dkey }}">{{ dkey }}({{ itype_data }})</label>
                     {% if itype_data == 'int' %}
-                    <input type="number" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" required>
+                        <input type="number" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" required>
                     {% elif itype_data == 'pin' %}
-                    <input type="number" min="0" max="7" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" required>
+                        <input type="number" min="0" max="7" id="input_{{ dkey }}" class="form-control" placeholder="{{ dkey }}" name="{{ dkey }}" required>
                     {% elif itype_data == 'bool' %}
-                    <select id="input_{{ dkey }}" class="form-control" name="{{ dkey }}" required>
-                        <option value="0">False</option>
-                        <option value="1">True</option>
-                    </select>
+                        <select id="input_{{ dkey }}" class="form-control" name="{{ dkey }}" required>
+                            <option value="0">False</option>
+                            <option value="1">True</option>
+                        </select>
                     {% elif itype_data == 'str' %}
-                    <input type="text" class="form-control input_{{ dkey }}" placeholder="{{ dkey }}" name="{{ dkey }}" required>
+                        <input type="text" class="form-control input_{{ dkey }}" placeholder="{{ dkey }}" name="{{ dkey }}" required>
                     {% endif %}
                 {% endfor %}
             </div>
