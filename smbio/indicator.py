@@ -84,10 +84,8 @@ class LedBlink(Peripheral):
             self.on()
 
     def update_state(self, state):
-        if state:
-            self._running = True
-        else:
-            self._running = False
+        if bool(state) != bool(self._running):
+            self._running = state
 
     def update(self):
         if self._running:
