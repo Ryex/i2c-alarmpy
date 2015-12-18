@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import sqlite3
 from contextlib import closing
@@ -21,6 +22,7 @@ def get_db():
 def write_log(message, error=False, alarm=False):
     with closing(get_db()) as db:
         print(message)
+        sys.stdout.flush()
         db.cursor().execute(
             "insert into log "
             "(error, alarm, message, log_time) "
