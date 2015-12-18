@@ -61,8 +61,10 @@ class Keypad4x4Matrix(Peripheral):
         self.in_string = ""
 
     def ensure_mode(self):
-        self.io.set_mode(0xF0)  # upper 4 bits are inputs
-        self.io.set_pullup(0xF0)  # enable upper 4 bits pullups
+        if self.io.get_mode() != 0xF0:
+            self.io.set_mode(0xF0)  # upper 4 bits are inputs
+        if self.io.get_pullup(0xF0):
+            self.io.set_pullup(0xF0)  # enable upper 4 bits pullups
 
     def read(self):
         self.ensure_mode()

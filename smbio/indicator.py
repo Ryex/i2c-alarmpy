@@ -91,8 +91,8 @@ class LedBlink(Peripheral):
         if self._running:
             now = time.time()
             if (now - self.last) * 1000 > self.interval:
-                self.flip()
                 self.last = now
+                self.flip()
         else:
             if bool(self._state):
                 self.off()
@@ -234,7 +234,7 @@ class BuzzerRepeat(Peripheral):
         self.io.set_mode_pin(self.pin, self.io.WRITE)
         self.buzzing = False
         self.last = 0
-        self.last_1 = 0
+        self.last_i = 0
         self.looping = 0
 
     def ensure_mode(self):
@@ -271,6 +271,7 @@ class BuzzerRepeat(Peripheral):
 
     def update_loop(self):
         if (time.time() - self.last_i) * 1000 > self.interval:
+            self.last_i = time.time()
             self.buzz()
 
     def update_state(self, state):
