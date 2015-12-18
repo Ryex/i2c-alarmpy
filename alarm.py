@@ -408,7 +408,10 @@ class Alarm:
             for key in self.actions:
                 action = self.actions[key]
                 code_hash = action["code_hash"]
-                if bcrypt.hashpw(data, code_hash) == code_hash:
+                if bcrypt.hashpw(
+                        data.encode('UTF-8'),
+                        code_hash.encode('UTF-8')
+                        ).decode('UTF-8') == code_hash:
                     self.process_command(
                         action["command"],
                         action["reason"])
