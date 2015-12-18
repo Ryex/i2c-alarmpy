@@ -32,7 +32,7 @@
                     <td>
                         <table class="table">
                             <tr>
-                            {% for data_key, data_value in smbio.INTERFACEDATAMAP[interface["type"]] | dictsort %}
+                            {% for data_key, data_value in interface["data"] | dictsort %}
                                 <th>{{ data_key }}</th>
                             {% endfor %}
                             </tr>
