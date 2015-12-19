@@ -214,11 +214,10 @@ class IO:
             warnings.warn(
                 "Unexpected state: "
                 "got {} expected {} "
-                "in {} bus: {} addr: {}".format(
+                "in {} addr: {}".format(
                     hex(got),
                     hex(expected),
                     where,
-                    int(self.bus),
                     hex(self.addr)),
                 RuntimeWarning)
 
